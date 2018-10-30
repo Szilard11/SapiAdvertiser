@@ -1,2 +1,1 @@
 # SapiAdvertiser
-alma
