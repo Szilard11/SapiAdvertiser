@@ -218,7 +218,7 @@ public class PhonePrefix {
         map.put("PY", "+595");
         map.put("QA", "+974");
         map.put("RE", "+262");
-        map.put("RO", "+40");
+        map.put("RO", "+4");
         map.put("RS", "+381");
         map.put("RU", "+7");
         map.put("RW", "+250");
