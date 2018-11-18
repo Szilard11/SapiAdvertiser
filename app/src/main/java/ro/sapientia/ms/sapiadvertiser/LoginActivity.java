@@ -85,7 +85,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     mPhoneNr.requestFocus();
                     return;
                 }
-                SendVerificationCode(phoneNr);
+                SendVerificationCode(finalPhoneNr);
 
                 break;
             case R.id.button_login:
