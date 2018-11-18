@@ -13,11 +13,35 @@ import android.view.ViewGroup;
  */
 public class HomeFragment extends Fragment {
 
+    String image,title,short_description;
 
     public HomeFragment() {
         // Required empty public constructor
     }
 
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getShort_description() {
+        return short_description;
+    }
+
+    public void setShort_description(String short_description) {
+        this.short_description = short_description;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
