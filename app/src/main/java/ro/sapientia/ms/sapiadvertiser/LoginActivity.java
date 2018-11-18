@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -30,6 +32,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private Spinner mCountryCode;
 
     private FirebaseAuth mAuth;
+    private PhonePrefix prefix = new PhonePrefix();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +54,20 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         mAuth = FirebaseAuth.getInstance();
 
         //Intent intent = new Intent(LoginActivity.this,LoginActivity.class);
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this,android.R.layout.simple_spinner_dropdown_item,prefix.getList());
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mCountryCode.setAdapter(spinnerAdapter);
+        mCountryCode.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                //String countryPrefix = prefix.prefixFor(adapterView.getItemAtPosition(i).toString());
+            }
 
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
     }
 
     @Override
@@ -59,11 +75,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         switch (view.getId()) {
             case R.id.button_getCode:
                 String phoneNr = mPhoneNr.getText().toString();
-                // TODO: PhonePrefix prefix;
-                //mCountryCode.setAdapter();
-                //ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this,)
-                //String countryCode = prefix.prefixFor(mCountryCode)
-                if(phoneNr.isEmpty() )//|| phoneNr.length()!=10)
+
+                String countryPrefix = prefix.prefixFor(mCountryCode.getSelectedItem().toString());
+                String finalPhoneNr = countryPrefix + phoneNr;
+
+                if(finalPhoneNr.isEmpty() || finalPhoneNr.length()<10)
                 {
                     mPhoneNr.setError("Valid number is required");
                     mPhoneNr.requestFocus();
@@ -74,7 +90,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 break;
             case R.id.button_login:
                 String code = mCode.getText().toString();
-                if(code.isEmpty())// || code.length()<6)
+                if(code.isEmpty() || code.length()<6)
                 {
                     mCode.setError("Valid code is required");
                     mCode.requestFocus();

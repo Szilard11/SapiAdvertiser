@@ -1,10 +1,24 @@
 package ro.sapientia.ms.sapiadvertiser;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 public class PhonePrefix {
     private static Map<String, String> map = new HashMap<>();
+    private static ArrayList<String> list = new ArrayList<>();
+
+    PhonePrefix()
+    {
+        fillList();
+        Collections.sort(list);
+    }
+
+    ArrayList<String> getList()
+    {
+        return list;
+    }
 
     public String prefixFor(String iso2CountryCode) {
         String result = map.get(iso2CountryCode);
@@ -12,6 +26,11 @@ public class PhonePrefix {
             throw new IllegalArgumentException("Unknown country code " + iso2CountryCode);
         }
         return result;
+    }
+
+    private void fillList()
+    {
+        list.addAll(map.keySet());
     }
 
     static {
@@ -31,7 +50,7 @@ public class PhonePrefix {
         map.put("AU", "+61");
         map.put("AW", "+297");
         map.put("AX", "+358-18");
-        map.put("AZ", "+374-97");
+        //map.put("AZ", "+374-97");
         map.put("AZ", "+994");
         map.put("BA", "+387");
         map.put("BB", "+1-246");
@@ -68,7 +87,7 @@ public class PhonePrefix {
         map.put("CU", "+53");
         map.put("CV", "+238");
         map.put("CX", "+61");
-        map.put("CY", "+90-392");
+        //map.put("CY", "+90-392");
         map.put("CY", "+357");
         map.put("CZ", "+420");
         map.put("DE", "+49");
@@ -151,7 +170,6 @@ public class PhonePrefix {
         map.put("LY", "+218");
         map.put("MA", "+212");
         map.put("MC", "+377");
-        map.put("MD", "+373-533");
         map.put("MD", "+373");
         map.put("ME", "+382");
         map.put("MG", "+261");
@@ -217,7 +235,6 @@ public class PhonePrefix {
         map.put("SL", "+232");
         map.put("SM", "+378");
         map.put("SN", "+221");
-        map.put("SO", "+252");
         map.put("SO", "+252");
         map.put("SR", "+597");
         map.put("ST", "+239");
