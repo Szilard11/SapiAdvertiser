@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    tools:layout_editor_absoluteY="25dp">
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/view_pager"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/adv_det_longdesc"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/adv_det_longdesc"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="239dp"
+        android:ems="10"
+        android:enabled="false"
+        android:inputType="textMultiLine"
+        android:text="nemjo ez igy"
+        android:textColor="#000000"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/adv_det_title" />
+
+    <TextView
+        android:id="@+id/adv_det_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="145dp"
+        android:text="TextView"
+        android:textColor="#000000"
+        android:enabled="false"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/adv_det_longdesc"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/adv_det_phone"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:ems="10"
+        android:inputType="phone"
+        android:text="No phone number"
+        android:textColor="#000000"
+        android:enabled="false"
+        app:layout_constraintBottom_toTopOf="@+id/adv_det_email"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/adv_det_longdesc" />
+
+    <EditText
+        android:id="@+id/adv_det_email"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:ems="10"
+        android:inputType="textEmailAddress"
+        android:text="No email"
+        android:textColor="#000000"
+        android:enabled="false"
+        app:layout_constraintBottom_toTopOf="@+id/adv_det_location"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/adv_det_phone" />
+
+    <EditText
+        android:id="@+id/adv_det_location"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="8dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="No location"
+        android:textColor="#000000"
+        android:enabled="false"
+        app:layout_constraintBottom_toTopOf="@+id/adv_det_name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/adv_det_email" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/circleImageView2"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="11dp"
+        app:layout_constraintBottom_toBottomOf="@+id/adv_det_share_butt"
+        app:layout_constraintEnd_toStartOf="@+id/adv_det_name"
+        app:layout_constraintStart_toEndOf="@+id/adv_det_report_butt"
+        app:layout_constraintTop_toTopOf="@+id/adv_det_name"
+        app:layout_constraintVertical_bias="0.25" />
+
+    <EditText
+        android:id="@+id/adv_det_name"
+        android:layout_width="103dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:ems="20"
+        android:inputType="textPersonName"
+        android:enabled="false"
+        android:text="Name"
+        android:textColor="#000000"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/adv_det_share_butt"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="15dp"
+        android:background="@drawable/outline_share_black_24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/adv_det_report_butt"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/adv_det_name"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <Button
+        android:id="@+id/adv_det_report_butt"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="17dp"
+        android:layout_marginEnd="99dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/outline_report_black_24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/circleImageView2"
+        app:layout_constraintStart_toEndOf="@+id/adv_det_share_butt"
+        app:layout_constraintTop_toBottomOf="@+id/adv_det_location"
+        app:layout_constraintVertical_bias="1.0" />
+</android.support.constraint.ConstraintLayout>
