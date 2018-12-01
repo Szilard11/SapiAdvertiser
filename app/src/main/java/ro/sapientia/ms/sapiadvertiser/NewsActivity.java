@@ -23,13 +23,13 @@ public class NewsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news);
-        mMainFrame=(FrameLayout) findViewById(R.id.main_frame);
-        mMainNav=(BottomNavigationView) findViewById(R.id.main_nav);
+        mMainFrame = (FrameLayout) findViewById(R.id.main_frame);
+        mMainNav = (BottomNavigationView) findViewById(R.id.main_nav);
 
 
-        homeFragment=new HomeFragment();
-        addFragment= new AddFragment();
-        personFragment=new PersonFragment();
+        homeFragment = new HomeFragment();
+        addFragment = new AddFragment();
+        personFragment = new PersonFragment();
 
         mMainNav.setSelectedItemId(R.id.nav_home);
         setFragment(homeFragment);

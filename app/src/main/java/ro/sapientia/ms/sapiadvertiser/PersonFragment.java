@@ -3,7 +3,9 @@ package ro.sapientia.ms.sapiadvertiser;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.text.style.UpdateLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +14,15 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -31,6 +42,10 @@ public class PersonFragment extends Fragment {
     private EditText mEmail;
     private EditText mPhoneNr;
     private EditText mAddress;
+
+    DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("users");
+    FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    String mUserNr = mAuth.getCurrentUser().getPhoneNumber();
 
     private View mInflatedView;
 
@@ -55,16 +70,41 @@ public class PersonFragment extends Fragment {
         mEmail = mInflatedView.findViewById(R.id.editText_Email);
         mAddress = mInflatedView.findViewById(R.id.editText_Address);
         mPhoneNr = mInflatedView.findViewById(R.id.editText_PhoneNr);
-
-        /*mFName.setInputType(0);
-        mLName.setClickable(false);
+        /*mFName.setEnabled(false);
         mLName.setEnabled(false);
-        mLName.setFocusable(false);
-        mLName.setKeyListener(null);
-        mLName.setFocusableInTouchMode(false);
-        mPhoneNr.setClickable(false);
-        mAddress.setClickable(false);
-        mEmail.setClickable(false);*/
+        mPhoneNr.setEnabled(false);
+        mAddress.setEnabled(false);
+        mEmail.setEnabled(false);*/
+
+        mDatabase.child(mUserNr).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot){
+                mLName.setText(dataSnapshot.child("LastName").getValue().toString());
+                mFName.setText(dataSnapshot.child("FirstName").getValue().toString());
+                mAddress.setText(dataSnapshot.child("Address").getValue().toString());
+                mEmail.setText(dataSnapshot.child("Email").getValue().toString());
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        mDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                mLName.setText(dataSnapshot.child("LastName").getValue().toString());
+                mFName.setText(dataSnapshot.child("FirstName").getValue().toString());
+                mAddress.setText(dataSnapshot.child("Address").getValue().toString());
+                mEmail.setText(dataSnapshot.child("Email").getValue().toString());
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                //Failed to read data
+            }
+        });
 
         mMyAdvs_Button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,4 +155,5 @@ public class PersonFragment extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_person, container, false);
     }
+
 }
