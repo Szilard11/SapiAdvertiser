@@ -53,6 +53,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         mAuth = FirebaseAuth.getInstance();
 
+        if(mAuth.getCurrentUser() != null)
+        {
+            Intent intent = new Intent(LoginActivity.this, NewsActivity.class);
+            //ez allati sor akkor kell ha nem akarsz vissza menni a loginre, hanem a visszaval egybol az appot bezarja
+            intent.setFlags(intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+        }
         //Intent intent = new Intent(LoginActivity.this,LoginActivity.class);
         ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this,android.R.layout.simple_spinner_dropdown_item,prefix.getList());
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -108,16 +115,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         signIntWithCredential(credential);
     }
 
-    private void signIntWithCredential(PhoneAuthCredential credential) {
+    private void signIntWithCredential(final PhoneAuthCredential credential) {
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful())
                         {
-                            Intent intent = new Intent(LoginActivity.this,NewsActivity.class);
+                            Intent intent = new Intent(LoginActivity.this, NewsActivity.class);
                             //ez allati sor akkor kell ha nem akarsz vissza menni a loginre, hanem a visszaval egybol az appot bezarja
-                            // intent.setFlags(intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            intent.setFlags(intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(intent);
                         }
                         else
