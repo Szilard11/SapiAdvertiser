@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    tools:layout_editor_absoluteY="25dp">
+
+    <Button
+        android:id="@+id/button_login"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="68dp"
+        android:layout_marginEnd="68dp"
+        android:layout_marginBottom="100dp"
+        android:background="@color/colorPrimaryDark"
+        android:text="Sign In"
+        android:textAllCaps="false"
+        android:textColor="@android:color/white"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spinner_counterycode" />
+
+    <Button
+        android:id="@+id/button_register"
+        android:layout_width="133dp"
+        android:layout_height="41dp"
+        android:layout_marginBottom="16dp"
+        android:background="@color/colorPrimaryDark"
+        android:text="Register"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button_login" />
+
+    <EditText
+        android:id="@+id/editText_phonenr"
+        android:layout_width="232dp"
+        android:layout_height="46dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="9dp"
+        android:ems="10"
+        android:hint="Phone number"
+        android:inputType="number"
+        android:textColor="@android:color/black"
+        android:textColorHint="@android:color/darker_gray"
+        app:layout_constraintBottom_toTopOf="@+id/button_getCode"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/spinner_counterycode"
+        app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="164dp"
+        android:layout_height="85dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="106dp"
+        app:layout_constraintBottom_toTopOf="@+id/editText_phonenr"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/logo" />
+
+    <Button
+        android:id="@+id/button_getCode"
+        android:layout_width="136dp"
+        android:layout_height="53dp"
+        android:layout_marginStart="26dp"
+        android:layout_marginEnd="21dp"
+        android:layout_marginBottom="52dp"
+        android:background="@color/colorPrimaryDark"
+        android:text="Get Code"
+        app:layout_constraintBottom_toTopOf="@+id/editText_code"
+        app:layout_constraintEnd_toEndOf="@+id/editText_code"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/editText_phonenr"
+        app:layout_constraintTop_toBottomOf="@+id/editText_phonenr" />
+
+    <EditText
+        android:id="@+id/editText_code"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="8dp"
+        android:ems="10"
+        android:hint="Enter the received code"
+        android:inputType="number"
+        android:textColor="@android:color/black"
+        android:textColorHint="@android:color/darker_gray"
+        app:layout_constraintBottom_toTopOf="@+id/button_login"
+        app:layout_constraintEnd_toEndOf="@+id/button_login"
+        app:layout_constraintTop_toBottomOf="@+id/button_getCode" />
+
+    <Spinner
+        android:id="@+id/spinner_counterycode"
+        android:layout_width="65dp"
+        android:layout_height="46dp"
+        android:layout_marginStart="43dp"
+        android:layout_marginTop="206dp"
+        android:layout_marginBottom="166dp"
+        android:background="@color/colorPrimaryDark"
+        android:textColor="@android:color/black"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/button_login"
+        app:layout_constraintEnd_toStartOf="@+id/editText_phonenr"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</android.support.constraint.ConstraintLayout>

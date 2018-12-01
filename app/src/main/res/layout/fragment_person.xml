@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    tools:context=".PersonFragment"
+    tools:layout_editor_absoluteY="25dp">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <ImageButton
+        android:id="@+id/imageButton_Save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="6dp"
+        android:backgroundTint="@color/colorWhite"
+        android:src="@drawable/baseline_edit_black_18dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/editText_Address"
+        app:layout_constraintStart_toEndOf="@+id/editText_Address" />
+
+    <ImageButton
+        android:id="@+id/logoffButt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="29dp"
+        android:backgroundTint="@color/colorWhite"
+        android:src="@drawable/baseline_settings_power_black_36dp"
+        android:textColor="@android:color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/profile_image"
+        android:layout_width="187dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="29dp"
+        android:layout_marginBottom="35dp"
+        android:src="@drawable/logo"
+        app:civ_border_color="@color/colorWhite"
+        app:civ_border_width="2dp"
+        app:layout_constraintBottom_toTopOf="@+id/editText_LName"
+        app:layout_constraintStart_toEndOf="@+id/logoffButt"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/editText_FName"
+        android:layout_width="0dp"
+        android:layout_height="49dp"
+        android:layout_marginTop="68dp"
+        android:layout_marginBottom="71dp"
+        android:ems="10"
+        android:hint="First name"
+        android:inputType="textPersonName"
+        android:textColor="@android:color/black"
+        android:textColorHint="@android:color/darker_gray"
+        app:layout_constraintBottom_toBottomOf="@+id/editText_PhoneNr"
+        app:layout_constraintEnd_toEndOf="@+id/editText_Address"
+        app:layout_constraintStart_toStartOf="@+id/editText_PhoneNr"
+        app:layout_constraintTop_toTopOf="@+id/editText_LName" />
+
+    <ImageButton
+        android:id="@+id/imageButton_Edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="6dp"
+        android:backgroundTint="@color/colorWhite"
+        android:src="@drawable/baseline_edit_black_18dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/editText_LName"
+        android:layout_width="0dp"
+        android:layout_height="54dp"
+        android:layout_marginTop="48dp"
+        android:ems="10"
+        android:hint="Last name"
+        android:inputType="textPersonName"
+        android:textColor="@android:color/black"
+        android:textColorHint="@android:color/darker_gray"
+        app:layout_constraintEnd_toEndOf="@+id/editText_FName"
+        app:layout_constraintStart_toStartOf="@+id/editText_FName"
+        app:layout_constraintTop_toBottomOf="@+id/logoffButt" />
+
+    <EditText
+        android:id="@+id/editText_Email"
+        android:layout_width="0dp"
+        android:layout_height="47dp"
+        android:layout_marginStart="3dp"
+        android:layout_marginTop="87dp"
+        android:layout_marginEnd="3dp"
+        android:layout_marginBottom="85dp"
+        android:ems="10"
+        android:hint="Email"
+        android:inputType="textEmailAddress"
+        android:textColor="@android:color/black"
+        android:textColorHint="@android:color/darker_gray"
+        app:layout_constraintBottom_toTopOf="@+id/imageButton_Edit"
+        app:layout_constraintEnd_toEndOf="@+id/editText_Address"
+        app:layout_constraintStart_toStartOf="@+id/editText_Address"
+        app:layout_constraintTop_toBottomOf="@+id/editText_FName" />
+
+    <EditText
+        android:id="@+id/editText_PhoneNr"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="3dp"
+        android:layout_marginEnd="6dp"
+        android:layout_marginBottom="210dp"
+        android:ems="10"
+        android:hint="Phone number"
+        android:inputType="phone"
+        android:textColor="@android:color/black"
+        android:textColorHint="@android:color/darker_gray"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/editText_Email"
+        app:layout_constraintStart_toStartOf="@+id/editText_Address" />
+
+    <EditText
+        android:id="@+id/editText_Address"
+        android:layout_width="293dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="14dp"
+        android:layout_marginTop="14dp"
+        android:layout_marginBottom="16dp"
+        android:ems="10"
+        android:hint="Address"
+        android:inputType="text"
+        android:textColor="@android:color/black"
+        android:textColorHint="@android:color/darker_gray"
+        app:layout_constraintBottom_toTopOf="@+id/imageButton_Edit"
+        app:layout_constraintStart_toStartOf="@+id/imageButton_Edit"
+        app:layout_constraintTop_toBottomOf="@+id/editText_Email" />
+
+    <ImageButton
+        android:id="@+id/advsButt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:backgroundTint="@color/colorWhite"
+        android:src="@drawable/baseline_assignment_black_36dp"
+        app:layout_constraintStart_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</android.support.constraint.ConstraintLayout>

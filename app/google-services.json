@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "1013582686961",
+    "firebase_url": "https://sapiadvertiser-2e6f9.firebaseio.com",
+    "project_id": "sapiadvertiser-2e6f9",
+    "storage_bucket": "sapiadvertiser-2e6f9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1013582686961:android:a434738187dcb5b7",
+        "android_client_info": {
+          "package_name": "ro.sapientia.ms.sapiadvertiser"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1013582686961-f3prd1rvnup0rcmmci7h6l7d99hf4gco.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCfCmVfMgESGo-mpDkCq0BytpHbaBBgkVA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
