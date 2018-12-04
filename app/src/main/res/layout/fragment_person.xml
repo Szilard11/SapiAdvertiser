@@ -10,67 +10,67 @@
 
     <!-- TODO: Update blank fragment layout -->
 
-    <ImageButton
+    <Button
         android:id="@+id/imageButton_Save"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="28dp"
         android:layout_marginBottom="6dp"
-        android:backgroundTint="@color/colorWhite"
-        android:src="@drawable/baseline_edit_black_18dp"
+        android:background="@drawable/baseline_edit_black_18dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/editText_Address"
-        app:layout_constraintStart_toEndOf="@+id/editText_Address" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
-    <ImageButton
+    <Button
         android:id="@+id/logoffButt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="29dp"
-        android:backgroundTint="@color/colorWhite"
-        android:src="@drawable/baseline_settings_power_black_36dp"
-        android:textColor="@android:color/black"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/baseline_settings_power_black_36dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/profile_image" />
 
     <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/profile_image"
-        android:layout_width="187dp"
+        android:layout_width="140dp"
         android:layout_height="0dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="29dp"
-        android:layout_marginBottom="35dp"
+        android:layout_marginTop="27dp"
+        android:layout_marginBottom="16dp"
         android:src="@drawable/logo"
         app:civ_border_color="@color/colorWhite"
         app:civ_border_width="2dp"
         app:layout_constraintBottom_toTopOf="@+id/editText_LName"
-        app:layout_constraintStart_toEndOf="@+id/logoffButt"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
 
     <EditText
         android:id="@+id/editText_FName"
         android:layout_width="0dp"
         android:layout_height="49dp"
-        android:layout_marginTop="68dp"
-        android:layout_marginBottom="71dp"
+        android:layout_marginStart="26dp"
+        android:layout_marginTop="64dp"
+        android:layout_marginEnd="26dp"
+        android:layout_marginBottom="61dp"
         android:ems="10"
-        android:hint="First name"
+        android:enabled="false"
         android:inputType="textPersonName"
+        android:text="No first name"
         android:textColor="@android:color/black"
         android:textColorHint="@android:color/darker_gray"
         app:layout_constraintBottom_toBottomOf="@+id/editText_PhoneNr"
-        app:layout_constraintEnd_toEndOf="@+id/editText_Address"
-        app:layout_constraintStart_toStartOf="@+id/editText_PhoneNr"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/editText_LName" />
 
-    <ImageButton
+    <Button
         android:id="@+id/imageButton_Edit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="33dp"
         android:layout_marginBottom="6dp"
-        android:backgroundTint="@color/colorWhite"
-        android:src="@drawable/baseline_edit_black_18dp"
+        android:background="@drawable/baseline_edit_black_18dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -78,74 +78,86 @@
         android:id="@+id/editText_LName"
         android:layout_width="0dp"
         android:layout_height="54dp"
-        android:layout_marginTop="48dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="183dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="183dp"
         android:ems="10"
-        android:hint="Last name"
+        android:enabled="false"
         android:inputType="textPersonName"
+        android:text="No last name"
         android:textColor="@android:color/black"
         android:textColorHint="@android:color/darker_gray"
-        app:layout_constraintEnd_toEndOf="@+id/editText_FName"
-        app:layout_constraintStart_toStartOf="@+id/editText_FName"
-        app:layout_constraintTop_toBottomOf="@+id/logoffButt" />
+        app:layout_constraintBottom_toBottomOf="@+id/editText_Email"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/editText_Email"
         android:layout_width="0dp"
-        android:layout_height="47dp"
-        android:layout_marginStart="3dp"
-        android:layout_marginTop="87dp"
-        android:layout_marginEnd="3dp"
-        android:layout_marginBottom="85dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="28dp"
+        android:layout_marginBottom="14dp"
         android:ems="10"
-        android:hint="Email"
+        android:enabled="false"
         android:inputType="textEmailAddress"
+        android:text="No email"
         android:textColor="@android:color/black"
         android:textColorHint="@android:color/darker_gray"
-        app:layout_constraintBottom_toTopOf="@+id/imageButton_Edit"
-        app:layout_constraintEnd_toEndOf="@+id/editText_Address"
-        app:layout_constraintStart_toStartOf="@+id/editText_Address"
-        app:layout_constraintTop_toBottomOf="@+id/editText_FName" />
+        app:layout_constraintBottom_toTopOf="@+id/editText_Address"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editText_PhoneNr" />
 
     <EditText
         android:id="@+id/editText_PhoneNr"
         android:layout_width="0dp"
         android:layout_height="48dp"
-        android:layout_marginStart="3dp"
-        android:layout_marginEnd="6dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginEnd="28dp"
         android:layout_marginBottom="210dp"
+        android:enabled="false"
         android:ems="10"
-        android:hint="Phone number"
         android:inputType="phone"
+        android:text="No phone number"
         android:textColor="@android:color/black"
         android:textColorHint="@android:color/darker_gray"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/editText_Email"
-        app:layout_constraintStart_toStartOf="@+id/editText_Address" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
         android:id="@+id/editText_Address"
-        android:layout_width="293dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="14dp"
-        android:layout_marginTop="14dp"
-        android:layout_marginBottom="16dp"
+        android:layout_width="0dp"
+        android:layout_height="55dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="77dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="78dp"
         android:ems="10"
-        android:hint="Address"
+        android:enabled="false"
         android:inputType="text"
+        android:text="No address"
         android:textColor="@android:color/black"
         android:textColorHint="@android:color/darker_gray"
-        app:layout_constraintBottom_toTopOf="@+id/imageButton_Edit"
-        app:layout_constraintStart_toStartOf="@+id/imageButton_Edit"
-        app:layout_constraintTop_toBottomOf="@+id/editText_Email" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editText_PhoneNr" />
 
-    <ImageButton
+    <Button
         android:id="@+id/advsButt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
-        android:backgroundTint="@color/colorWhite"
-        android:src="@drawable/baseline_assignment_black_36dp"
-        app:layout_constraintStart_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="28dp"
+
+        android:background="@drawable/baseline_assignment_black_36dp"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/profile_image" />
 
 </android.support.constraint.ConstraintLayout>

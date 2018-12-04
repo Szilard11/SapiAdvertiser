@@ -9,6 +9,7 @@ import android.text.style.UpdateLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -33,10 +34,10 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class PersonFragment extends Fragment {
 
     private CircleImageView mProfileImage;
-    private ImageButton mLogOff_Button;
-    private ImageButton mMyAdvs_Button;
-    private ImageButton mEdit_Button;
-    private ImageButton mSave_Button;
+    private Button mLogOff_Button;
+    private Button mMyAdvs_Button;
+    private Button mEdit_Button;
+    private Button mSave_Button;
     private EditText mLName;
     private EditText mFName;
     private EditText mEmail;
@@ -91,7 +92,7 @@ public class PersonFragment extends Fragment {
             }
         });
 
-        mDatabase.addValueEventListener(new ValueEventListener() {
+        /*mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 mLName.setText(dataSnapshot.child("LastName").getValue().toString());
@@ -104,19 +105,20 @@ public class PersonFragment extends Fragment {
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 //Failed to read data
             }
-        });
+        });*/
 
         mMyAdvs_Button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO: new intent
+                Intent intent = new Intent(getActivity(),AdvDetailActivity.class);
+                startActivity(intent);
             }
         });
         mLogOff_Button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FirebaseAuth auth = FirebaseAuth.getInstance();
-                auth.signOut();
+                //FirebaseAuth auth = FirebaseAuth.getInstance();
+                mAuth.signOut();
                 Intent intent = new Intent(getActivity(),LoginActivity.class);
                 startActivity(intent);
             }
@@ -126,11 +128,11 @@ public class PersonFragment extends Fragment {
             public void onClick(View view) {
                 mEdit_Button.setClickable(false);
                 mSave_Button.setClickable(true);
-                /*mFName.setEnabled(true);
+                mFName.setEnabled(true);
                 mLName.setEnabled(true);
                 mPhoneNr.setEnabled(true);
                 mAddress.setEnabled(true);
-                mEmail.setEnabled(true);*/
+                mEmail.setEnabled(true);
 
             }
         });
@@ -143,17 +145,17 @@ public class PersonFragment extends Fragment {
                 {
                     mEdit_Button.setClickable(true);
                     mSave_Button.setClickable(false);
-                    /*mFName.setEnabled(false);
+                    mFName.setEnabled(false);
                     mLName.setEnabled(false);
                     mPhoneNr.setEnabled(false);
                     mAddress.setEnabled(false);
-                    mEmail.setEnabled(false);*/
+                    mEmail.setEnabled(false);
                 }
             }
         });
 
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_person, container, false);
+        return this.mInflatedView;
     }
 
 }
