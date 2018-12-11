@@ -25,18 +25,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/spinner_counterycode" />
 
-    <Button
-        android:id="@+id/button_register"
-        android:layout_width="133dp"
-        android:layout_height="41dp"
-        android:layout_marginBottom="16dp"
-        android:background="@color/colorPrimaryDark"
-        android:text="Register"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_login" />
-
     <EditText
         android:id="@+id/editText_phonenr"
         android:layout_width="232dp"

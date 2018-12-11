@@ -11,96 +11,81 @@
     <!-- TODO: Update blank fragment layout -->
 
     <Button
-        android:id="@+id/imageButton_Save"
+        android:id="@+id/logoffButt"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginEnd="28dp"
-        android:layout_marginBottom="6dp"
-        android:background="@drawable/baseline_edit_black_18dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <Button
-        android:id="@+id/logoffButt"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="39dp"
+        android:layout_marginEnd="18dp"
+        android:layout_marginBottom="159dp"
         android:background="@drawable/baseline_settings_power_black_36dp"
+        app:layout_constraintBottom_toTopOf="@+id/editText_FName"
+        app:layout_constraintEnd_toStartOf="@+id/profile_image"
+        app:layout_constraintHorizontal_chainStyle="spread"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/profile_image" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/profile_image"
-        android:layout_width="140dp"
-        android:layout_height="0dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_marginTop="27dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="10dp"
         android:src="@drawable/logo"
         app:civ_border_color="@color/colorWhite"
         app:civ_border_width="2dp"
-        app:layout_constraintBottom_toTopOf="@+id/editText_LName"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintBottom_toTopOf="@+id/button_Edit"
+        app:layout_constraintEnd_toStartOf="@+id/advsButt"
+        app:layout_constraintStart_toEndOf="@+id/logoffButt"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/editText_FName"
-        android:layout_width="0dp"
+        android:layout_width="332dp"
         android:layout_height="49dp"
-        android:layout_marginStart="26dp"
-        android:layout_marginTop="64dp"
-        android:layout_marginEnd="26dp"
-        android:layout_marginBottom="61dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="9dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="294dp"
         android:ems="10"
         android:enabled="false"
         android:inputType="textPersonName"
         android:text="No first name"
         android:textColor="@android:color/black"
         android:textColorHint="@android:color/darker_gray"
-        app:layout_constraintBottom_toBottomOf="@+id/editText_PhoneNr"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/editText_LName" />
-
-    <Button
-        android:id="@+id/imageButton_Edit"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="33dp"
-        android:layout_marginBottom="6dp"
-        android:background="@drawable/baseline_edit_black_18dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/logoffButt" />
 
     <EditText
         android:id="@+id/editText_LName"
-        android:layout_width="0dp"
-        android:layout_height="54dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="183dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginBottom="183dp"
+        android:layout_width="332dp"
+        android:layout_height="49dp"
+        android:layout_marginStart="26dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="26dp"
+        android:layout_marginBottom="16dp"
         android:ems="10"
         android:enabled="false"
         android:inputType="textPersonName"
         android:text="No last name"
         android:textColor="@android:color/black"
         android:textColorHint="@android:color/darker_gray"
-        app:layout_constraintBottom_toBottomOf="@+id/editText_Email"
+        app:layout_constraintBottom_toTopOf="@+id/editText_FName"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/button_Edit" />
 
     <EditText
         android:id="@+id/editText_Email"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="28dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="28dp"
-        android:layout_marginBottom="14dp"
+        android:layout_width="332dp"
+        android:layout_height="49dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="13dp"
         android:ems="10"
         android:enabled="false"
         android:inputType="textEmailAddress"
@@ -114,50 +99,76 @@
 
     <EditText
         android:id="@+id/editText_PhoneNr"
-        android:layout_width="0dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="28dp"
-        android:layout_marginEnd="28dp"
-        android:layout_marginBottom="210dp"
-        android:enabled="false"
+        android:layout_width="332dp"
+        android:layout_height="49dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="9dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="11dp"
         android:ems="10"
+        android:enabled="false"
         android:inputType="phone"
         android:text="No phone number"
         android:textColor="@android:color/black"
         android:textColorHint="@android:color/darker_gray"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/editText_Email"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editText_FName" />
 
     <EditText
         android:id="@+id/editText_Address"
-        android:layout_width="0dp"
-        android:layout_height="55dp"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="77dp"
-        android:layout_marginEnd="30dp"
-        android:layout_marginBottom="78dp"
+        android:layout_width="332dp"
+        android:layout_height="49dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="15dp"
         android:ems="10"
         android:enabled="false"
         android:inputType="text"
         android:text="No address"
         android:textColor="@android:color/black"
         android:textColorHint="@android:color/darker_gray"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/button_Save"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText_PhoneNr" />
+        app:layout_constraintTop_toBottomOf="@+id/editText_Email" />
 
     <Button
         android:id="@+id/advsButt"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_marginTop="12dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_marginEnd="28dp"
-
         android:background="@drawable/baseline_assignment_black_36dp"
-
+        app:layout_constraintBottom_toBottomOf="@+id/logoffButt"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/profile_image" />
+        app:layout_constraintStart_toEndOf="@+id/profile_image"
+        app:layout_constraintTop_toTopOf="@+id/logoffButt" />
+
+    <Button
+        android:id="@+id/button_Edit"
+        android:layout_width="113dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="14dp"
+        android:text="Edit profile"
+        android:textColor="@android:color/white"
+        android:background="@color/colorPrimaryDark"
+        app:layout_constraintBottom_toTopOf="@+id/editText_LName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profile_image" />
+
+    <Button
+        android:id="@+id/button_Save"
+        android:layout_width="117dp"
+        android:layout_height="43dp"
+        android:layout_marginBottom="8dp"
+        android:text="Save profile"
+        android:textColor="@android:color/white"
+        android:background="@color/colorPrimaryDark"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editText_Address" />
 
 </android.support.constraint.ConstraintLayout>

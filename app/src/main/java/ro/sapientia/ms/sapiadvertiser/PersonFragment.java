@@ -13,7 +13,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -44,9 +46,14 @@ public class PersonFragment extends Fragment {
     private EditText mPhoneNr;
     private EditText mAddress;
 
-    DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("users");
-    FirebaseAuth mAuth = FirebaseAuth.getInstance();
-    String mUserNr = mAuth.getCurrentUser().getPhoneNumber();
+    private String m_oldFName;
+    private String m_oldLName;
+    private String m_oldPhoneNr;
+    private String m_oldEmail;
+
+    private DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private String mUserNr = mAuth.getCurrentUser().getPhoneNumber();
 
     private View mInflatedView;
 
@@ -63,27 +70,23 @@ public class PersonFragment extends Fragment {
         mProfileImage = mInflatedView.findViewById(R.id.profile_image);
         mMyAdvs_Button = mInflatedView.findViewById(R.id.advsButt);
         mLogOff_Button = mInflatedView.findViewById(R.id.logoffButt);
-        mSave_Button = mInflatedView.findViewById(R.id.imageButton_Save);
-        mEdit_Button = mInflatedView.findViewById(R.id.imageButton_Edit);
+        mSave_Button = mInflatedView.findViewById(R.id.button_Save);
+        mEdit_Button = mInflatedView.findViewById(R.id.button_Edit);
         mSave_Button.setClickable(false);
         mFName = mInflatedView.findViewById(R.id.editText_FName);
         mLName = mInflatedView.findViewById(R.id.editText_LName);
         mEmail = mInflatedView.findViewById(R.id.editText_Email);
         mAddress = mInflatedView.findViewById(R.id.editText_Address);
         mPhoneNr = mInflatedView.findViewById(R.id.editText_PhoneNr);
-        /*mFName.setEnabled(false);
-        mLName.setEnabled(false);
-        mPhoneNr.setEnabled(false);
-        mAddress.setEnabled(false);
-        mEmail.setEnabled(false);*/
 
-        mDatabase.child(mUserNr).addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabase.child("users").child(mUserNr).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot){
                 mLName.setText(dataSnapshot.child("LastName").getValue().toString());
                 mFName.setText(dataSnapshot.child("FirstName").getValue().toString());
                 mAddress.setText(dataSnapshot.child("Address").getValue().toString());
                 mEmail.setText(dataSnapshot.child("Email").getValue().toString());
+                mPhoneNr.setText(mUserNr);
             }
 
             @Override
@@ -117,7 +120,6 @@ public class PersonFragment extends Fragment {
         mLogOff_Button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //FirebaseAuth auth = FirebaseAuth.getInstance();
                 mAuth.signOut();
                 Intent intent = new Intent(getActivity(),LoginActivity.class);
                 startActivity(intent);
@@ -126,6 +128,10 @@ public class PersonFragment extends Fragment {
         mEdit_Button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                m_oldFName = mFName.getText().toString();
+                m_oldLName = mLName.getText().toString();
+                m_oldPhoneNr = mPhoneNr.getText().toString();
+                m_oldEmail = mEmail.getText().toString();
                 mEdit_Button.setClickable(false);
                 mSave_Button.setClickable(true);
                 mFName.setEnabled(true);
@@ -133,16 +139,43 @@ public class PersonFragment extends Fragment {
                 mPhoneNr.setEnabled(true);
                 mAddress.setEnabled(true);
                 mEmail.setEnabled(true);
-
+                mLogOff_Button.setClickable(false);
+                mMyAdvs_Button.setClickable(false);
             }
         });
         mSave_Button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                boolean saveSuccess = false;
-                //TODO::Database update
-                if(saveSuccess)
+                //TODO::Database update? Validate entered texts? Edit kozben nincs mashva menes vagy regi marad?
+                /*Boolean fName = false;
+                Boolean lName = false;
+                Boolean email = false;
+                Boolean phoneNr = false;*/
+                String newFName = mFName.getText().toString();
+                String newLName = mLName.getText().toString();
+                String newEmail = mEmail.getText().toString();
+                String newPhoneNr = mPhoneNr.getText().toString();
+
+                String regexStr = "^[+][0-9]{10,13}$";
+                if(newPhoneNr.matches(regexStr))
                 {
+                    if (m_oldFName != newFName) {
+                        mDatabase.child("users").child(mUserNr).child("FirstName").setValue(newFName);
+                        //fName = true;
+                    }
+                    if (m_oldLName != newLName) {
+                        mDatabase.child("users").child(mUserNr).child("LastName").setValue(newLName);
+                        //lName = true;
+                    }
+                    if (m_oldEmail != newEmail) {
+                        mDatabase.child("users").child(mUserNr).child("Email").setValue(newEmail);
+                        //email = true;
+                    }
+                    if (m_oldPhoneNr != newPhoneNr) {
+                        mDatabase.child(mUserNr).setValue(newPhoneNr);
+                        mDatabase.child("sapiAdvertisments/userId").setValue(newPhoneNr);
+                        //phoneNr = true;
+                    }
                     mEdit_Button.setClickable(true);
                     mSave_Button.setClickable(false);
                     mFName.setEnabled(false);
@@ -150,6 +183,12 @@ public class PersonFragment extends Fragment {
                     mPhoneNr.setEnabled(false);
                     mAddress.setEnabled(false);
                     mEmail.setEnabled(false);
+                    mLogOff_Button.setClickable(true);
+                    mMyAdvs_Button.setClickable(true);
+                }
+                else
+                {
+                    Toast.makeText(getActivity().getApplicationContext(), "Invalid phone number, can't save profile", Toast.LENGTH_LONG).show();
                 }
             }
         });

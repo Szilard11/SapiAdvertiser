@@ -24,7 +24,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class AdvDetailActivity extends AppCompatActivity {
     private ViewPagerAdapter mAdapter;
     private ViewPager mViewPager;
-    private ArrayList<String> mImageURLs=new ArrayList<>();
+    private ArrayList<String> mImageURLs = new ArrayList<>();
     private Button mShareButton;
     private Button mReportButton;
     private TextView mTitle;
@@ -35,6 +35,8 @@ public class AdvDetailActivity extends AppCompatActivity {
     private TextView mUserFname;
     private CircleImageView mProfileImage;
     private DatabaseReference database;
+    private String mUserId;
+    private String mNewsId;
 
     public void setViews(String pTitle,String pLongdesc,String pPhone,String pEmail,String pLocation,String pUserFname, String pProfileImage ){
         this.mTitle.setText(pTitle);
@@ -66,7 +68,8 @@ public class AdvDetailActivity extends AppCompatActivity {
         mProfileImage = findViewById(R.id.circleImageView2);
 
 
-        final Intent sharingIntent=new Intent(Intent.ACTION_SEND);
+        getIncomingExtras();
+        final Intent sharingIntent = new Intent(Intent.ACTION_SEND);
         sharingIntent.setType("text/plain");
         String shareBody = "Here is the share content body";
         sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Subject Here");
@@ -88,7 +91,7 @@ public class AdvDetailActivity extends AppCompatActivity {
 
         database = FirebaseDatabase.getInstance().getReference("users");
 
-        database.child("+40123456789").addListenerForSingleValueEvent(new ValueEventListener() {
+        database.child(mUserId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot){
                 String email = dataSnapshot.child("Email").getValue().toString();
@@ -100,15 +103,19 @@ public class AdvDetailActivity extends AppCompatActivity {
 
             }
         });
-
-
-
-
-
-
-
-
         mAdapter = new ViewPagerAdapter(this,mImageURLs);
         mViewPager.setAdapter(mAdapter);
+    }
+
+    private void getIncomingExtras()
+    {
+        if(getIntent().hasExtra("news_id") &&
+                getIntent().hasExtra("user_id"))
+        {
+            mUserId = getIntent().getStringExtra("user_id");
+            mNewsId = getIntent().getStringExtra("news_id");
+
+            //https://www.youtube.com/watch?v=ZXoGG2XTjzU&t=449s itt volt a tutorial
+        }
     }
 }
