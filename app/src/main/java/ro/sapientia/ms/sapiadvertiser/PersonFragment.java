@@ -196,5 +196,4 @@ public class PersonFragment extends Fragment {
         // Inflate the layout for this fragment
         return this.mInflatedView;
     }
-
 }

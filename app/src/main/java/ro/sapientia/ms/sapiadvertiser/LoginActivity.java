@@ -29,10 +29,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private Button mGetCode;
     private Button mLogin;
     private String mVerificationCode;
-    private Spinner mCountryCode;
+    //private Spinner mCountryCode;
 
     private FirebaseAuth mAuth;
-    private PhonePrefix prefix = new PhonePrefix();
+    //private PhonePrefix prefix = new PhonePrefix();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +43,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         mLogin = findViewById(R.id.button_login);
         mCode = findViewById(R.id.editText_code);
         mGetCode = findViewById(R.id.button_getCode);
-        mCountryCode = findViewById(R.id.spinner_counterycode);
+        //mCountryCode = findViewById(R.id.spinner_counterycode);
 
         mLogin.setVisibility(View.INVISIBLE);
         mCode.setVisibility(View.INVISIBLE);
@@ -56,25 +56,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         if(mAuth.getCurrentUser() != null)
         {
             Intent intent = new Intent(LoginActivity.this, NewsActivity.class);
-            //ez allati sor akkor kell ha nem akarsz vissza menni a loginre, hanem a visszaval egybol az appot bezarja
             intent.setFlags(intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
         }
-        //Intent intent = new Intent(LoginActivity.this,LoginActivity.class);
-        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this,android.R.layout.simple_spinner_dropdown_item,prefix.getList());
-        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mCountryCode.setAdapter(spinnerAdapter);
-        /*mCountryCode.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                //String countryPrefix = prefix.prefixFor(adapterView.getItemAtPosition(i).toString());
-            }
+        //ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this,android.R.layout.simple_spinner_dropdown_item,prefix.getList());
+        //spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        //mCountryCode.setAdapter(spinnerAdapter);
 
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });*/
     }
 
     @Override
@@ -83,16 +71,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             case R.id.button_getCode:
                 String phoneNr = mPhoneNr.getText().toString();
 
-                String countryPrefix = prefix.prefixFor(mCountryCode.getSelectedItem().toString());
-                String finalPhoneNr = countryPrefix + phoneNr;
+                //String countryPrefix = prefix.prefixFor(mCountryCode.getSelectedItem().toString());
+                //String finalPhoneNr = countryPrefix + phoneNr;
 
-                if(finalPhoneNr.isEmpty() || finalPhoneNr.length()<10)
+                if(phoneNr.isEmpty() || phoneNr.length()!=12)
                 {
                     mPhoneNr.setError("Valid number is required");
                     mPhoneNr.requestFocus();
                     return;
                 }
-                SendVerificationCode(finalPhoneNr);
+                SendVerificationCode(phoneNr);
 
                 break;
             case R.id.button_login:
@@ -123,7 +111,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         if(task.isSuccessful())
                         {
                             Intent intent = new Intent(LoginActivity.this, NewsActivity.class);
-                            //ez allati sor akkor kell ha nem akarsz vissza menni a loginre, hanem a visszaval egybol az appot bezarja
                             intent.setFlags(intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(intent);
                         }

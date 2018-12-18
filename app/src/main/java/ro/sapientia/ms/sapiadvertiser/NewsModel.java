@@ -24,6 +24,10 @@ public class NewsModel {
         this.mUserId = userId;
         this.mNewsId = newsId;
     }
+    public NewsModel()
+    {
+        
+    }
 
     public void setmTitle(String mTitle) {
         this.mTitle = mTitle;
