@@ -1,5 +1,4 @@
-package ro.sapientia.ms.sapiadvertiser;
-
+package ro.sapientia.ms.sapiadvertiser.Fragments;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -20,19 +19,13 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 import ro.sapientia.ms.sapiadvertiser.Adapters.RecyclerViewAdapter_AllAdvs;
-
+import ro.sapientia.ms.sapiadvertiser.NewsModel;
+import ro.sapientia.ms.sapiadvertiser.R;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class HomeFragment extends Fragment {
-
-    /*private NewsModel mNewsModel;
-    private ImageView mImage;
-    private TextView mCounterView;
-    private TextView mTitle;
-    private TextView mShortDescription;
-    private CircleImageView mProfileImage;*/
+public class MyAdvsFragment extends Fragment {
 
     private ArrayList<NewsModel> mNewsList = new ArrayList<>();
     private RecyclerView mRecyclerView;
@@ -43,7 +36,7 @@ public class HomeFragment extends Fragment {
 
     private View mInflatedView;
 
-    public HomeFragment() {
+    public MyAdvsFragment() {
         // Required empty public constructor
     }
 
@@ -62,6 +55,7 @@ public class HomeFragment extends Fragment {
 
         return this.mInflatedView;
     }
+
     private void initNewsData()
     {
         String newsId, title, shortDesc, image, userId;

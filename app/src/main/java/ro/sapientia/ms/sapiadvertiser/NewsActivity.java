@@ -26,7 +26,6 @@ public class NewsActivity extends AppCompatActivity {
         mMainFrame = (FrameLayout) findViewById(R.id.main_frame);
         mMainNav = (BottomNavigationView) findViewById(R.id.main_nav);
 
-
         homeFragment = new HomeFragment();
         addFragment = new AddFragment();
         personFragment = new PersonFragment();
