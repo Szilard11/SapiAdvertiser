@@ -19,6 +19,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import ro.sapientia.ms.sapiadvertiser.Adapters.ViewPagerAdapter;
 
 public class MyAdvDetailActivity extends AppCompatActivity {
     private ViewPagerAdapter mAdapter;

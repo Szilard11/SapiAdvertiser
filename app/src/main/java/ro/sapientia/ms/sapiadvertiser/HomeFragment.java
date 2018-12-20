@@ -1,6 +1,7 @@
 package ro.sapientia.ms.sapiadvertiser;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -51,28 +52,27 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        this.mInflatedView = inflater.inflate(R.layout.fragment_person, container, false);
-
-        initNewsData();
+        this.mInflatedView = inflater.inflate(R.layout.fragment_home, container, false);
 
         mRecyclerView = mInflatedView.findViewById(R.id.recyclerView);
+        initNewsData();
+
         mAdapter = new RecyclerViewAdapter_AllAdvs(mNewsList,mInflatedView.getContext());
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mInflatedView.getContext()));
 
         return this.mInflatedView;
     }
-    private void initNewsData()
+    public void initNewsData()
     {
         String newsId, title, shortDesc, image, userId;
         Integer counter;
-        NewsModel newsModel = new NewsModel();
+        final NewsModel newsModel = new NewsModel();
         //TODO: lekerni az osszes news-t
-        mDatabase.child("sapiAdvertisments").addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabase.child("sapiAdvertisments").child("201812201420").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot){
-                //newsId = setmNewsId(dataSnapshot.child("newsId").getValue().toString());
-                //setmDescription(dataSnapshot.child(newsId).child("ShortDesc").getValue().toString());
+                newsModel.setmTitle(dataSnapshot.child("Title").getValue().toString());
             }
 
             @Override
@@ -80,6 +80,7 @@ public class HomeFragment extends Fragment {
 
             }
         });
+        mNewsList.add(newsModel);
         /*NewsModel news = new NewsModel("title","short description",10,"url",
                 "url2", "userid","newsid");
         mNewsList.add(news);*/
