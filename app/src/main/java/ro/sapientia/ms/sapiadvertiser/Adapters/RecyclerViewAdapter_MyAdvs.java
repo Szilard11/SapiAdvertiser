@@ -50,7 +50,7 @@ public class RecyclerViewAdapter_MyAdvs extends RecyclerView.Adapter<RecyclerVie
                 .into(holder.mProfileImage);
         holder.mShortDescription.setText(mNewsList.get(position).getmDescription());
         holder.mTitle.setText(mNewsList.get(position).getmTitle());
-        holder.mCounterView.setText(mNewsList.get(position).getmCounter());
+        holder.mCounterView.setText(mNewsList.get(position).getmCounter().toString());
         holder.mLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

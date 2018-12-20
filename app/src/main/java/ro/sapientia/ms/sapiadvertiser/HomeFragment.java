@@ -22,6 +22,8 @@ import java.util.ArrayList;
 
 import ro.sapientia.ms.sapiadvertiser.Adapters.RecyclerViewAdapter_AllAdvs;
 
+import static java.lang.Integer.parseInt;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -57,9 +59,7 @@ public class HomeFragment extends Fragment {
         mRecyclerView = mInflatedView.findViewById(R.id.recyclerView);
         initNewsData();
 
-        mAdapter = new RecyclerViewAdapter_AllAdvs(mNewsList,mInflatedView.getContext());
-        mRecyclerView.setAdapter(mAdapter);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(mInflatedView.getContext()));
+
 
         return this.mInflatedView;
     }
@@ -67,12 +67,33 @@ public class HomeFragment extends Fragment {
     {
         String newsId, title, shortDesc, image, userId;
         Integer counter;
-        final NewsModel newsModel = new NewsModel();
-        //TODO: lekerni az osszes news-t
-        mDatabase.child("sapiAdvertisments").child("201812201420").addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabase.child("sapiAdvertisments").orderByValue().addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot){
-                newsModel.setmTitle(dataSnapshot.child("Title").getValue().toString());
+                for(final DataSnapshot data : dataSnapshot.getChildren()) {
+                    final NewsModel newsModel = new NewsModel();
+                    newsModel.setmNewsId(data.getKey());
+                    newsModel.setmTitle(data.child("Title").getValue().toString());
+                    newsModel.setmCounter(parseInt(data.child("ViewCounter").getValue().toString()));
+                    newsModel.setmImage(data.child("Image").getValue().toString());
+                    newsModel.setmDescription(data.child("ShortDesc").getValue().toString());
+                    newsModel.setmUserId(data.child("UserId").getValue().toString());
+                    mNewsList.add(newsModel);
+                }
+                /*newsModel.setmTitle(dataSnapshot.child("Title").getValue().toString());
+                newsModel.setmNewsId("201812151648");
+                newsModel.setmCounter(1);
+                newsModel.setmImage(dataSnapshot.child("Image").getValue().toString());
+                newsModel.setmProfileImage("");
+                newsModel.setmDescription(dataSnapshot.child("ShortDesc").getValue().toString());
+                newsModel.setmUserId("+40123456789");*/
+                /*for(int i=0;i<mNewsList.size();i++)
+                {
+                    mNewsList.get(i).getmUserId();
+                }*/
+                mAdapter = new RecyclerViewAdapter_AllAdvs(mNewsList,mInflatedView.getContext());
+                mRecyclerView.setAdapter(mAdapter);
+                mRecyclerView.setLayoutManager(new LinearLayoutManager(mInflatedView.getContext()));
             }
 
             @Override
@@ -80,7 +101,6 @@ public class HomeFragment extends Fragment {
 
             }
         });
-        mNewsList.add(newsModel);
         /*NewsModel news = new NewsModel("title","short description",10,"url",
                 "url2", "userid","newsid");
         mNewsList.add(news);*/
