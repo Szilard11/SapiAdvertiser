@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/parent_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="200dp"
     tools:layout_editor_absoluteY="25dp">
 
     <ImageView
         android:id="@+id/viewImage"
         android:layout_width="0dp"
         android:layout_height="104dp"
-        android:layout_marginBottom="12dp"
+        android:layout_marginBottom="19dp"
         android:scaleType="fitXY"
         app:layout_constraintBottom_toTopOf="@+id/profile_image"
         app:layout_constraintEnd_toEndOf="parent"
@@ -21,14 +21,14 @@
     <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/profile_image"
         android:layout_width="0dp"
-        android:layout_height="61dp"
+        android:layout_height="0dp"
         android:layout_marginStart="16dp"
-        android:layout_marginEnd="15dp"
+        android:layout_marginEnd="8dp"
         android:src="@drawable/logo"
         app:civ_border_color="@color/colorWhite"
         app:civ_border_width="2dp"
         app:layout_constraintBottom_toTopOf="@+id/counter"
-        app:layout_constraintEnd_toStartOf="@+id/shortDesc"
+        app:layout_constraintEnd_toStartOf="@+id/viewTitle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/viewImage" />
 
@@ -36,19 +36,7 @@
         android:id="@+id/viewTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:text="TextView"
-        android:textColor="#000000"
-        android:textSize="20dp"
-        app:layout_constraintBottom_toTopOf="@+id/shortDesc"
-        app:layout_constraintStart_toStartOf="@+id/shortDesc" />
-
-    <TextView
-        android:id="@+id/shortDesc"
-        android:layout_width="0dp"
-        android:layout_height="38dp"
-        android:layout_marginTop="35dp"
-        android:layout_marginEnd="28dp"
+        android:layout_marginEnd="56dp"
         android:text="TextView"
         android:textColor="#000000"
         android:textSize="20dp"
@@ -57,17 +45,31 @@
         app:layout_constraintTop_toTopOf="@+id/profile_image" />
 
     <TextView
-        android:id="@+id/counter"
-        android:layout_width="0dp"
-        android:layout_height="57dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="382dp"
+        android:id="@+id/shortDesc"
+        android:layout_width="103dp"
+        android:layout_height="38dp"
+        android:layout_marginTop="19dp"
+        android:layout_marginBottom="16dp"
         android:text="TextView"
         android:textColor="#000000"
         android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/shortDesc"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/counter" />
+
+    <TextView
+        android:id="@+id/counter"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:text="TextView"
+        android:textColor="#000000"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/viewTitle"
         app:layout_constraintTop_toBottomOf="@+id/profile_image" />
 
 </android.support.constraint.ConstraintLayout>

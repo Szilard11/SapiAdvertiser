@@ -18,7 +18,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-import ro.sapientia.ms.sapiadvertiser.Adapters.RecyclerViewAdapter_AllAdvs;
+import ro.sapientia.ms.sapiadvertiser.Adapters.RecyclerViewAdapter_MyAdvs;
 import ro.sapientia.ms.sapiadvertiser.NewsModel;
 import ro.sapientia.ms.sapiadvertiser.R;
 
@@ -29,7 +29,7 @@ public class MyAdvsFragment extends Fragment {
 
     private ArrayList<NewsModel> mNewsList = new ArrayList<>();
     private RecyclerView mRecyclerView;
-    private RecyclerViewAdapter_AllAdvs mAdapter;
+    private RecyclerViewAdapter_MyAdvs mAdapter;
 
     private DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
@@ -44,12 +44,12 @@ public class MyAdvsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        this.mInflatedView = inflater.inflate(R.layout.fragment_person, container, false);
+        this.mInflatedView = inflater.inflate(R.layout.fragment_my_advs, container, false);
 
         initNewsData();
 
         mRecyclerView = mInflatedView.findViewById(R.id.recyclerView);
-        mAdapter = new RecyclerViewAdapter_AllAdvs(mNewsList,mInflatedView.getContext());
+        mAdapter = new RecyclerViewAdapter_MyAdvs(mNewsList,mInflatedView.getContext());
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mInflatedView.getContext()));
 
