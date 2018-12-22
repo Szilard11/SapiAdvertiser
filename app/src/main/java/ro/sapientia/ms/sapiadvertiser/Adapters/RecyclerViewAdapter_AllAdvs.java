@@ -22,12 +22,10 @@ import ro.sapientia.ms.sapiadvertiser.R;
 public class RecyclerViewAdapter_AllAdvs extends RecyclerView.Adapter<RecyclerViewAdapter_AllAdvs.ViewHolder> {
 
     private ArrayList<NewsModel> mNewsList = new ArrayList<>();
-    //private final ViewHolder.OnItemClickListener mListener;
     private Context mContext;
 
     public RecyclerViewAdapter_AllAdvs(ArrayList<NewsModel> newsList, Context context) {
         this.mNewsList = newsList;
-        //this.mListener = listener;
         this.mContext = context;
     }
     @Override
@@ -59,7 +57,6 @@ public class RecyclerViewAdapter_AllAdvs extends RecyclerView.Adapter<RecyclerVi
                 mContext.startActivity(intent);
             }
         });
-        //holder.bind(mNewsList.get(position), mListener); //lehet igy is megy
     }
     @Override
     public int getItemCount() {
@@ -83,19 +80,5 @@ public class RecyclerViewAdapter_AllAdvs extends RecyclerView.Adapter<RecyclerVi
             mLayout = view.findViewById(R.id.parent_layout);
             mProfileImage = view.findViewById(R.id.profile_image);
         }
-        /*public void bind(final NewsModel item, final OnItemClickListener listener) {
-            //title.setText(item.getTitle());
-            //date.setText(item.getDate());
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    listener.onItemClick(item);
-                }
-            });
-        }
-        //Interface to handle click event
-        public interface OnItemClickListener {
-            void onItemClick(NewsModel item);
-        }*/
     }
 }

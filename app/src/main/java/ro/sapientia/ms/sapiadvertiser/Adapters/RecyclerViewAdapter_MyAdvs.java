@@ -15,31 +15,28 @@ import com.bumptech.glide.Glide;
 import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import ro.sapientia.ms.sapiadvertiser.AdvDetailActivity;
 import ro.sapientia.ms.sapiadvertiser.MyAdvDetailActivity;
 import ro.sapientia.ms.sapiadvertiser.NewsModel;
 import ro.sapientia.ms.sapiadvertiser.R;
 
-public class RecyclerViewAdapter_MyAdvs extends RecyclerView.Adapter<RecyclerViewAdapter_AllAdvs.ViewHolder> {
+public class RecyclerViewAdapter_MyAdvs extends RecyclerView.Adapter<RecyclerViewAdapter_MyAdvs.ViewHolder> {
 
     private ArrayList<NewsModel> mNewsList = new ArrayList<>();
-    //private final ViewHolder.OnItemClickListener mListener;
     private Context mContext;
 
     public RecyclerViewAdapter_MyAdvs(ArrayList<NewsModel> newsList, Context context) {
         this.mNewsList = newsList;
-        //this.mListener = listener;
         this.mContext = context;
     }
     @Override
-    public RecyclerViewAdapter_AllAdvs.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.view_newsmodel, parent, false);
-        RecyclerViewAdapter_AllAdvs.ViewHolder holder = new RecyclerViewAdapter_AllAdvs.ViewHolder(itemView);
+        ViewHolder holder = new ViewHolder(itemView);
         return holder;
     }
     @Override
-    public void onBindViewHolder(RecyclerViewAdapter_AllAdvs.ViewHolder holder, final int position) {
+    public void onBindViewHolder(ViewHolder holder, final int position) {
         Glide.with(mContext)
                 .asBitmap()
                 .load(mNewsList.get(position).getmImage())
@@ -59,7 +56,6 @@ public class RecyclerViewAdapter_MyAdvs extends RecyclerView.Adapter<RecyclerVie
                 mContext.startActivity(intent);
             }
         });
-        //holder.bind(mNewsList.get(position), mListener); //lehet igy is megy
     }
     @Override
     public int getItemCount() {
@@ -83,19 +79,5 @@ public class RecyclerViewAdapter_MyAdvs extends RecyclerView.Adapter<RecyclerVie
             mLayout = view.findViewById(R.id.parent_layout);
             mProfileImage = view.findViewById(R.id.profile_image);
         }
-        /*public void bind(final NewsModel item, final OnItemClickListener listener) {
-            //title.setText(item.getTitle());
-            //date.setText(item.getDate());
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    listener.onItemClick(item);
-                }
-            });
-        }
-        //Interface to handle click event
-        public interface OnItemClickListener {
-            void onItemClick(NewsModel item);
-        }*/
     }
 }

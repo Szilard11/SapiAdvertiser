@@ -28,7 +28,7 @@ public class ViewPagerAdapter extends PagerAdapter {
     //private String[] mImageURLs;
     private LayoutInflater mInflater;
     private Context mContext;
-    private ArrayList<String> mImageURLs=new ArrayList<>();
+    private ArrayList<String> mImageURLs = new ArrayList<>();
 
     public ViewPagerAdapter(Context mContext, ArrayList<String> mImageURLs) {
         this.mContext = mContext;

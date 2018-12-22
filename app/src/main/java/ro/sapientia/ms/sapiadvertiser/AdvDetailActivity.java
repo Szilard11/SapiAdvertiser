@@ -34,7 +34,7 @@ public class AdvDetailActivity extends AppCompatActivity {
     private TextView mLocation;
     private TextView mUserFname;
     private CircleImageView mProfileImage;
-    private DatabaseReference database;
+    private DatabaseReference mdatabase;
     private String mUserId;
     private String mNewsId;
 
@@ -54,8 +54,8 @@ public class AdvDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_adv_detail);
-        mImageURLs.add("https://www.gettyimages.ie/gi-resources/images/Homepage/Hero/UK/CMS_Creative_164657191_Kingfisher.jpg");
-        mImageURLs.add("https://wallpaperbrowse.com/media/images/3848765-wallpaper-images-download.jpg");
+        //mImageURLs.add("https://www.gettyimages.ie/gi-resources/images/Homepage/Hero/UK/CMS_Creative_164657191_Kingfisher.jpg");
+        //mImageURLs.add("https://wallpaperbrowse.com/media/images/3848765-wallpaper-images-download.jpg");
         mViewPager = findViewById(R.id.view_pager);
         mShareButton = findViewById(R.id.adv_det_share_butt);
         mReportButton= findViewById(R.id.adv_det_report_butt);
@@ -89,13 +89,17 @@ public class AdvDetailActivity extends AppCompatActivity {
             }
         });
 
-        database = FirebaseDatabase.getInstance().getReference("users");
+        mdatabase = FirebaseDatabase.getInstance().getReference();
 
-        database.child(mUserId).addListenerForSingleValueEvent(new ValueEventListener() {
+        mdatabase.child("users").child(mUserId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot){
                 String email = dataSnapshot.child("Email").getValue().toString();
-                setViews("Alma","Ez egy almarol szol","+40123456789",email,"On da tree","Almacska","https://www.apple.com/ac/structured-data/images/knowledge_graph_logo.png?201606271147");
+                String loc = dataSnapshot.child("Address").getValue().toString();
+                String lName = dataSnapshot.child("LastName").getValue().toString();
+                String profileImg = dataSnapshot.child("ProfileImage").getValue().toString();
+                //kell kovi lekeres a kephez
+                setViews("Alma","Ez egy almarol szol",mUserId,email,loc,lName,profileImg);
             }
 
             @Override
@@ -114,8 +118,6 @@ public class AdvDetailActivity extends AppCompatActivity {
         {
             mUserId = getIntent().getStringExtra("user_id");
             mNewsId = getIntent().getStringExtra("news_id");
-
-            //https://www.youtube.com/watch?v=ZXoGG2XTjzU&t=449s itt volt a tutorial
         }
     }
 }

@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -24,7 +25,7 @@ import ro.sapientia.ms.sapiadvertiser.Adapters.ViewPagerAdapter;
 public class MyAdvDetailActivity extends AppCompatActivity {
     private ViewPagerAdapter mAdapter;
     private ViewPager mViewPager;
-    private ArrayList<String> mImageURLs=new ArrayList<>();
+    private ArrayList<String> mImageURLs = new ArrayList<>();
     private Button mShareButton;
     private Button mDeleteButton;
     private Button mEditButton;
@@ -33,9 +34,12 @@ public class MyAdvDetailActivity extends AppCompatActivity {
     private TextView mPhone;
     private TextView mEmail;
     private TextView mLocation;
-    private DatabaseReference database;
+    private DatabaseReference mdatabase;
+    private String mNewsId;
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private String mUserId = mAuth.getCurrentUser().getPhoneNumber();
 
-    public void setViews(String pTitle,String pLongdesc,String pPhone,String pEmail,String pLocation,String pUserFname, String pProfileImage ){
+    public void setViews(String pTitle,String pLongdesc,String pPhone,String pEmail,String pLocation){
         this.mTitle.setText(pTitle);
         this.mLongDesc.setText(pLongdesc);
         this.mPhone.setText(pPhone);
@@ -47,8 +51,8 @@ public class MyAdvDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_adv_detail);
-        mImageURLs.add("https://www.gettyimages.ie/gi-resources/images/Homepage/Hero/UK/CMS_Creative_164657191_Kingfisher.jpg");
-        mImageURLs.add("https://wallpaperbrowse.com/media/images/3848765-wallpaper-images-download.jpg");
+        //mImageURLs.add("https://www.gettyimages.ie/gi-resources/images/Homepage/Hero/UK/CMS_Creative_164657191_Kingfisher.jpg");
+        //mImageURLs.add("https://wallpaperbrowse.com/media/images/3848765-wallpaper-images-download.jpg");
         mViewPager = findViewById(R.id.view_pager2);
         mShareButton = findViewById(R.id.my_adv_det_share_butt);
         mDeleteButton= findViewById(R.id.my_adv_det_delete_butt);
@@ -59,7 +63,7 @@ public class MyAdvDetailActivity extends AppCompatActivity {
         mEmail = findViewById(R.id.my_adv_det_email);
         mLocation = findViewById(R.id.my_adv_det_location);
 
-
+        getIncomingExtras();
         final Intent sharingIntent=new Intent(Intent.ACTION_SEND);
         sharingIntent.setType("text/plain");
         String shareBody = "Here is the share content body";
@@ -87,13 +91,15 @@ public class MyAdvDetailActivity extends AppCompatActivity {
             }
         });
 
-        database = FirebaseDatabase.getInstance().getReference("users");
+        mdatabase = FirebaseDatabase.getInstance().getReference();
 
-        database.child("+40123456789").addListenerForSingleValueEvent(new ValueEventListener() {
+        mdatabase.child("users").child(mUserId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot){
                 String email = dataSnapshot.child("Email").getValue().toString();
-                setViews("Alma","Ez egy almarol szol","+40123456789",email,"On da tree","Almacska","https://www.apple.com/ac/structured-data/images/knowledge_graph_logo.png?201606271147");
+                String loc = dataSnapshot.child("Address").getValue().toString();
+                //kell kovi lekeres a kephez
+                setViews("Alma","Ez egy almarol szol",mUserId,email,loc);
             }
 
             @Override
@@ -102,14 +108,15 @@ public class MyAdvDetailActivity extends AppCompatActivity {
             }
         });
 
-
-
-
-
-
-
-
         mAdapter = new ViewPagerAdapter(this,mImageURLs);
         mViewPager.setAdapter(mAdapter);
+    }
+
+    private void getIncomingExtras()
+    {
+        if(getIntent().hasExtra("news_id"))
+        {
+            mNewsId = getIntent().getStringExtra("news_id");
+        }
     }
 }

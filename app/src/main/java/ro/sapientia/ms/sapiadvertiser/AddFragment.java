@@ -52,7 +52,6 @@ public class AddFragment extends Fragment {
     private DatabaseReference mDatabaseRef;
     private static final int RESULT_LOAD_IMAGE = 1;
 
-
     private List<String> fileNameList;
     private List<String> fileDoneList;
 
@@ -95,15 +94,12 @@ public class AddFragment extends Fragment {
                 uploadAdv();
             }
         });
-
-
         return this.mInflatedView;
     }
 
     private void uploadAdv() {
         //TODO megoldani a feltoltest
     }
-
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -138,18 +134,12 @@ public class AddFragment extends Fragment {
                             fileDoneList.add(finalI, "done");
                         }
                     });
-
                 }
-
                 Toast.makeText(getActivity(), "Selected Multiple Files", Toast.LENGTH_SHORT).show();
-
-            } else if (data.getData() != null){
-
-
-                        Toast.makeText(getActivity(), "Selected Single File", Toast.LENGTH_SHORT).show();
-
             }
-
+            else if (data.getData() != null){
+                Toast.makeText(getActivity(), "Selected Single File", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
@@ -174,7 +164,4 @@ public class AddFragment extends Fragment {
         }
         return result;
     }
-
-
-
 }

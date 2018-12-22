@@ -18,9 +18,12 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+import ro.sapientia.ms.sapiadvertiser.Adapters.RecyclerViewAdapter_AllAdvs;
 import ro.sapientia.ms.sapiadvertiser.Adapters.RecyclerViewAdapter_MyAdvs;
 import ro.sapientia.ms.sapiadvertiser.NewsModel;
 import ro.sapientia.ms.sapiadvertiser.R;
+
+import static java.lang.Integer.parseInt;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -46,27 +49,35 @@ public class MyAdvsFragment extends Fragment {
         // Inflate the layout for this fragment
         this.mInflatedView = inflater.inflate(R.layout.fragment_my_advs, container, false);
 
-        initNewsData();
-
         mRecyclerView = mInflatedView.findViewById(R.id.recyclerView);
-        mAdapter = new RecyclerViewAdapter_MyAdvs(mNewsList,mInflatedView.getContext());
-        mRecyclerView.setAdapter(mAdapter);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(mInflatedView.getContext()));
+        initNewsData();
 
         return this.mInflatedView;
     }
 
     private void initNewsData()
     {
-        String newsId, title, shortDesc, image, userId;
-        Integer counter;
-        NewsModel newsModel = new NewsModel();
-        //TODO: lekerni az osszes news-t
-        mDatabase.child("sapiAdvertisments").addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabase.child("sapiAdvertisments").orderByChild("UserId").equalTo(mAuth.getCurrentUser().getPhoneNumber()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot){
-                //newsId = setmNewsId(dataSnapshot.child("newsId").getValue().toString());
-                //setmDescription(dataSnapshot.child(newsId).child("ShortDesc").getValue().toString());
+                for(final DataSnapshot data : dataSnapshot.getChildren()) {
+                    final NewsModel newsModel = new NewsModel();
+                    newsModel.setmNewsId(data.getKey());
+                    newsModel.setmTitle(data.child("Title").getValue().toString());
+                    newsModel.setmCounter(parseInt(data.child("ViewCounter").getValue().toString()));
+                    //tob img is lehet fel kell bontani elsore
+                    newsModel.setmImage(data.child("Image").getValue().toString());
+                    newsModel.setmDescription(data.child("ShortDesc").getValue().toString());
+                    newsModel.setmUserId(mAuth.getCurrentUser().getPhoneNumber());
+                    mNewsList.add(newsModel);
+                }
+                /*for(int i=0;i<mNewsList.size();i++)
+                {
+                    mNewsList.get(i).getmUserId();
+                }*/
+                mAdapter = new RecyclerViewAdapter_MyAdvs(mNewsList,mInflatedView.getContext());
+                mRecyclerView.setAdapter(mAdapter);
+                mRecyclerView.setLayoutManager(new LinearLayoutManager(mInflatedView.getContext()));
             }
 
             @Override

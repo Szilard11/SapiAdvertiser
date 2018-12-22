@@ -29,7 +29,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
@@ -42,6 +41,7 @@ import java.util.List;
 import java.util.UUID;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import ro.sapientia.ms.sapiadvertiser.Fragments.MyAdvsFragment;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -63,11 +63,16 @@ public class PersonFragment extends Fragment {
     private EditText mAddress;
     private final int PICK_IMAGE_REQUEST = 71;
     private Uri filePath;
-    private StorageReference mStorageRef=FirebaseStorage.getInstance().getReference("ProfileImages");
+    private StorageReference mStorageRef = FirebaseStorage.getInstance().getReference("ProfileImages");
 
-    DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("users");
-    FirebaseAuth mAuth = FirebaseAuth.getInstance();
-    String mUserNr = mAuth.getCurrentUser().getPhoneNumber();
+    private String m_oldFName;
+    private String m_oldLName;
+    private String m_oldPhoneNr;
+    private String m_oldEmail;
+
+    private DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private String mUserNr = mAuth.getCurrentUser().getPhoneNumber();
 
     private View mInflatedView;
 
@@ -92,19 +97,15 @@ public class PersonFragment extends Fragment {
         mEmail = mInflatedView.findViewById(R.id.editText_Email);
         mAddress = mInflatedView.findViewById(R.id.editText_Address);
         mPhoneNr = mInflatedView.findViewById(R.id.editText_PhoneNr);
-        /*mFName.setEnabled(false);
-        mLName.setEnabled(false);
-        mPhoneNr.setEnabled(false);
-        mAddress.setEnabled(false);
-        mEmail.setEnabled(false);*/
 
-        mDatabase.child(mUserNr).addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabase.child("users").child(mUserNr).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot){
                 mLName.setText(dataSnapshot.child("LastName").getValue().toString());
                 mFName.setText(dataSnapshot.child("FirstName").getValue().toString());
                 mAddress.setText(dataSnapshot.child("Address").getValue().toString());
                 mEmail.setText(dataSnapshot.child("Email").getValue().toString());
+                mPhoneNr.setText(mUserNr);
             }
 
             @Override
@@ -131,13 +132,10 @@ public class PersonFragment extends Fragment {
         mMyAdvs_Button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AdvDetailFragment  fragment2= new AdvDetailFragment();
-                FragmentTransaction fragmentTransaction=getFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.main_frame,fragment2);
-                fragmentTransaction.commit();
+                MyAdvsFragment fragment = new MyAdvsFragment();
+                setFragment(fragment);
             }
         });
-
         mProfileImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -148,13 +146,16 @@ public class PersonFragment extends Fragment {
         mLogOff_Button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //FirebaseAuth auth = FirebaseAuth.getInstance();
                 LogOffDialog();
             }
         });
         mEdit_Button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                m_oldFName = mFName.getText().toString();
+                m_oldLName = mLName.getText().toString();
+                m_oldPhoneNr = mPhoneNr.getText().toString();
+                m_oldEmail = mEmail.getText().toString();
                 mEdit_Button.setClickable(false);
                 mSave_Button.setClickable(true);
                 mProfileImage.setEnabled(true);
@@ -163,16 +164,46 @@ public class PersonFragment extends Fragment {
                 mPhoneNr.setEnabled(true);
                 mAddress.setEnabled(true);
                 mEmail.setEnabled(true);
-
+                mLogOff_Button.setClickable(false);
+                mMyAdvs_Button.setClickable(false);
             }
         });
         mSave_Button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                boolean saveSuccess = false;
-                //TODO::Database update
-                if(saveSuccess)
+                //TODO::Database update? Validate entered texts? Edit kozben nincs mashva menes vagy regi marad?
+                /*Boolean fName = false;
+                Boolean lName = false;
+                Boolean email = false;
+                Boolean phoneNr = false;*/
+                String newFName = mFName.getText().toString();
+                String newLName = mLName.getText().toString();
+                String newEmail = mEmail.getText().toString();
+                String newPhoneNr = mPhoneNr.getText().toString();
+
+                String regexStr = "^[+][0-9]{10,13}$";
+                if(newPhoneNr.matches(regexStr))
                 {
+                    if (m_oldFName != newFName) {
+                        mDatabase.child("users").child(mUserNr).child("FirstName").setValue(newFName);
+                        //fName = true;
+                    }
+                    if (m_oldLName != newLName) {
+                        mDatabase.child("users").child(mUserNr).child("LastName").setValue(newLName);
+                        //lName = true;
+                    }
+                    if (m_oldEmail != newEmail) {
+                        mDatabase.child("users").child(mUserNr).child("Email").setValue(newEmail);
+                        //email = true;
+                    }
+                    if (m_oldPhoneNr != newPhoneNr) {
+                        mDatabase.child(mUserNr).setValue(newPhoneNr);
+                        mDatabase.child("sapiAdvertisments/userId").setValue(newPhoneNr);
+                        //phoneNr = true;
+                    }
+
+                    uploadImage();
+                    //TODO valami
                     mEdit_Button.setClickable(true);
                     mSave_Button.setClickable(false);
                     mProfileImage.setEnabled(false);
@@ -181,14 +212,24 @@ public class PersonFragment extends Fragment {
                     mPhoneNr.setEnabled(false);
                     mAddress.setEnabled(false);
                     mEmail.setEnabled(false);
-
+                    mLogOff_Button.setClickable(true);
+                    mMyAdvs_Button.setClickable(true);
                 }
-                uploadImage();
+                else
+                {
+                    Toast.makeText(getActivity().getApplicationContext(), "Invalid phone number, can't save profile", Toast.LENGTH_LONG).show();
+                }
             }
         });
 
         // Inflate the layout for this fragment
         return this.mInflatedView;
+    }
+
+    private void setFragment(Fragment fragment) {
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.main_frame,fragment);
+        fragmentTransaction.commit();
     }
 
     private void chooseImage() {
@@ -266,7 +307,6 @@ public class PersonFragment extends Fragment {
                 startActivity(intent);
                 dialog.dismiss();
             }
-
         });
 
         builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
@@ -280,6 +320,5 @@ public class PersonFragment extends Fragment {
 
         AlertDialog alert = builder.create();
         alert.show();
-
     }
 }

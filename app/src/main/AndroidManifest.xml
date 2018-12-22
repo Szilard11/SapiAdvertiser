@@ -19,6 +19,7 @@
         <activity android:name=".NewsActivity" />
         <activity android:name=".LoginActivity" />
         <activity android:name=".AdvDetailActivity"></activity>
+        <activity android:name=".MyAdvDetailActivity"></activity>
     </application>
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />

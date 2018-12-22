@@ -30,13 +30,6 @@ import static java.lang.Integer.parseInt;
  */
 public class HomeFragment extends Fragment {
 
-    /*private NewsModel mNewsModel;
-    private ImageView mImage;
-    private TextView mCounterView;
-    private TextView mTitle;
-    private TextView mShortDescription;
-    private CircleImageView mProfileImage;*/
-
     private ArrayList<NewsModel> mNewsList = new ArrayList<>();
     private RecyclerView mRecyclerView;
     private RecyclerViewAdapter_AllAdvs mAdapter;
@@ -59,15 +52,11 @@ public class HomeFragment extends Fragment {
         mRecyclerView = mInflatedView.findViewById(R.id.recyclerView);
         initNewsData();
 
-
-
         return this.mInflatedView;
     }
     public void initNewsData()
     {
-        String newsId, title, shortDesc, image, userId;
-        Integer counter;
-        mDatabase.child("sapiAdvertisments").orderByValue().addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabase.child("sapiAdvertisments").orderByKey().addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot){
                 for(final DataSnapshot data : dataSnapshot.getChildren()) {
@@ -101,8 +90,5 @@ public class HomeFragment extends Fragment {
 
             }
         });
-        /*NewsModel news = new NewsModel("title","short description",10,"url",
-                "url2", "userid","newsid");
-        mNewsList.add(news);*/
     }
 }
