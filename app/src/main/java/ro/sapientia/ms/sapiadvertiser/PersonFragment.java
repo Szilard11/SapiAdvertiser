@@ -14,6 +14,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,8 +23,12 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 
+import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -44,6 +49,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import ro.sapientia.ms.sapiadvertiser.Fragments.MyAdvsFragment;
 
 import static android.app.Activity.RESULT_OK;
+import static android.support.constraint.Constraints.TAG;
 
 
 /**
@@ -64,6 +70,8 @@ public class PersonFragment extends Fragment {
     private final int PICK_IMAGE_REQUEST = 71;
     private Uri filePath;
     private StorageReference mStorageRef = FirebaseStorage.getInstance().getReference("ProfileImages");
+    private boolean mIsImageUpdated = false;
+    private String mNewImageUrl;
 
     private String m_oldFName;
     private String m_oldLName;
@@ -105,6 +113,10 @@ public class PersonFragment extends Fragment {
                 mFName.setText(dataSnapshot.child("FirstName").getValue().toString());
                 mAddress.setText(dataSnapshot.child("Address").getValue().toString());
                 mEmail.setText(dataSnapshot.child("Email").getValue().toString());
+                Glide.with(getContext())
+                        .asBitmap()
+                        .load(dataSnapshot.child("ProfileImage").getValue().toString())
+                        .into(mProfileImage);
                 mPhoneNr.setText(mUserNr);
             }
 
@@ -196,13 +208,17 @@ public class PersonFragment extends Fragment {
                         mDatabase.child("users").child(mUserNr).child("Email").setValue(newEmail);
                         //email = true;
                     }
-                    if (m_oldPhoneNr != newPhoneNr) {
+                    /*if (m_oldPhoneNr != newPhoneNr) {
                         mDatabase.child(mUserNr).setValue(newPhoneNr);
                         mDatabase.child("sapiAdvertisments/userId").setValue(newPhoneNr);
                         //phoneNr = true;
-                    }
+                    }*/
 
                     uploadImage();
+                    //TODO big problem nem megy be az if-be
+
+
+
                     //TODO valami
                     mEdit_Button.setClickable(true);
                     mSave_Button.setClickable(false);
@@ -246,12 +262,17 @@ public class PersonFragment extends Fragment {
             final ProgressDialog progressDialog = new ProgressDialog(getContext());
             progressDialog.setTitle("Uploading...");
             progressDialog.show();
-
-            StorageReference ref = mStorageRef.child(UUID.randomUUID().toString());
-            ref.putFile(filePath)
+            final StorageReference storageRef = mStorageRef.child(UUID.randomUUID().toString());
+            storageRef.putFile(filePath)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            storageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    mDatabase.child("users").child(mUserNr).child("ProfileImage").setValue(uri.toString());
+                                }
+                            });
                             progressDialog.dismiss();
                             Toast.makeText(getActivity(), "Uploaded", Toast.LENGTH_SHORT).show();
                         }
@@ -313,7 +334,6 @@ public class PersonFragment extends Fragment {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                // I do not need any action here you might
                 dialog.dismiss();
             }
         });
