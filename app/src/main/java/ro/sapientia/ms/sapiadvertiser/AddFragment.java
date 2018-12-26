@@ -52,8 +52,8 @@ public class AddFragment extends Fragment {
     private DatabaseReference mDatabaseRef;
     private static final int RESULT_LOAD_IMAGE = 1;
 
-    private List<String> fileNameList;
-    private List<String> fileDoneList;
+    private List<String> fileNameList = new ArrayList<>();
+    private List<String> fileDoneList = new ArrayList<>();
 
 
     public AddFragment() {

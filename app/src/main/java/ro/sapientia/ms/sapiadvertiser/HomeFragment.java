@@ -54,12 +54,16 @@ public class HomeFragment extends Fragment {
 
         return this.mInflatedView;
     }
+
     public void initNewsData()
     {
+
+        mNewsList.clear();
         mDatabase.child("sapiAdvertisments").orderByKey().addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot){
                 for(final DataSnapshot data : dataSnapshot.getChildren()) {
+
                     final NewsModel newsModel = new NewsModel();
                     newsModel.setmNewsId(data.getKey());
                     newsModel.setmTitle(data.child("Title").getValue().toString());
@@ -67,22 +71,22 @@ public class HomeFragment extends Fragment {
                     newsModel.setmImage(data.child("Image").getValue().toString());
                     newsModel.setmDescription(data.child("ShortDesc").getValue().toString());
                     newsModel.setmUserId(data.child("UserId").getValue().toString());
-                    mNewsList.add(newsModel);
+                    mDatabase.child("users").child(data.child("UserId").getValue().toString()).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            newsModel.setmProfileImage(dataSnapshot.child("ProfileImage").getValue().toString());
+                            mNewsList.add(newsModel);
+                            mAdapter = new RecyclerViewAdapter_AllAdvs(mNewsList, mInflatedView.getContext());
+                            mRecyclerView.setAdapter(mAdapter);
+                            mRecyclerView.setLayoutManager(new LinearLayoutManager(mInflatedView.getContext()));
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
                 }
-                /*newsModel.setmTitle(dataSnapshot.child("Title").getValue().toString());
-                newsModel.setmNewsId("201812151648");
-                newsModel.setmCounter(1);
-                newsModel.setmImage(dataSnapshot.child("Image").getValue().toString());
-                newsModel.setmProfileImage("");
-                newsModel.setmDescription(dataSnapshot.child("ShortDesc").getValue().toString());
-                newsModel.setmUserId("+40123456789");*/
-                /*for(int i=0;i<mNewsList.size();i++)
-                {
-                    mNewsList.get(i).getmUserId();
-                }*/
-                mAdapter = new RecyclerViewAdapter_AllAdvs(mNewsList,mInflatedView.getContext());
-                mRecyclerView.setAdapter(mAdapter);
-                mRecyclerView.setLayoutManager(new LinearLayoutManager(mInflatedView.getContext()));
             }
 
             @Override

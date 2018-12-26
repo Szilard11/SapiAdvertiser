@@ -1,10 +1,12 @@
 package ro.sapientia.ms.sapiadvertiser;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -19,6 +21,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import ro.sapientia.ms.sapiadvertiser.Adapters.RecyclerViewAdapter_AllAdvs;
 import ro.sapientia.ms.sapiadvertiser.Adapters.ViewPagerAdapter;
 
 public class AdvDetailActivity extends AppCompatActivity {
@@ -37,6 +40,7 @@ public class AdvDetailActivity extends AppCompatActivity {
     private DatabaseReference mdatabase;
     private String mUserId;
     private String mNewsId;
+    private Context mContext = this;
 
     public void setViews(String pTitle,String pLongdesc,String pPhone,String pEmail,String pLocation,String pUserFname, String pProfileImage ){
         this.mTitle.setText(pTitle);
@@ -94,12 +98,26 @@ public class AdvDetailActivity extends AppCompatActivity {
         mdatabase.child("users").child(mUserId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot){
-                String email = dataSnapshot.child("Email").getValue().toString();
-                String loc = dataSnapshot.child("Address").getValue().toString();
-                String lName = dataSnapshot.child("LastName").getValue().toString();
-                String profileImg = dataSnapshot.child("ProfileImage").getValue().toString();
-                //kell kovi lekeres a kephez
-                setViews("Alma","Ez egy almarol szol",mUserId,email,loc,lName,profileImg);
+                final String email = dataSnapshot.child("Email").getValue().toString();
+                final String loc = dataSnapshot.child("Address").getValue().toString();
+                final String lName = dataSnapshot.child("LastName").getValue().toString();
+                final String profileImg = dataSnapshot.child("ProfileImage").getValue().toString();
+                mdatabase.child("sapiAdvertisments").child(mNewsId).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        mImageURLs.add(dataSnapshot.child("Image").getValue().toString());
+                        String longDesc = dataSnapshot.child("LongDesc").getValue().toString();
+                        String title = dataSnapshot.child("Title").getValue().toString();
+                        setViews(title,longDesc,mUserId,email,loc,lName,profileImg);
+                        mAdapter = new ViewPagerAdapter(mContext,mImageURLs);
+                        mViewPager.setAdapter(mAdapter);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
             }
 
             @Override
@@ -107,8 +125,6 @@ public class AdvDetailActivity extends AppCompatActivity {
 
             }
         });
-        mAdapter = new ViewPagerAdapter(this,mImageURLs);
-        mViewPager.setAdapter(mAdapter);
     }
 
     private void getIncomingExtras()

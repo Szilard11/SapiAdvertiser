@@ -1,5 +1,6 @@
 package ro.sapientia.ms.sapiadvertiser;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
@@ -38,6 +39,7 @@ public class MyAdvDetailActivity extends AppCompatActivity {
     private String mNewsId;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private String mUserId = mAuth.getCurrentUser().getPhoneNumber();
+    private Context mContext = this;
 
     public void setViews(String pTitle,String pLongdesc,String pPhone,String pEmail,String pLocation){
         this.mTitle.setText(pTitle);
@@ -96,10 +98,24 @@ public class MyAdvDetailActivity extends AppCompatActivity {
         mdatabase.child("users").child(mUserId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot){
-                String email = dataSnapshot.child("Email").getValue().toString();
-                String loc = dataSnapshot.child("Address").getValue().toString();
-                //kell kovi lekeres a kephez
-                setViews("Alma","Ez egy almarol szol",mUserId,email,loc);
+                final String email = dataSnapshot.child("Email").getValue().toString();
+                final String loc = dataSnapshot.child("Address").getValue().toString();
+                mdatabase.child("sapiAdvertisments").child(mNewsId).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        mImageURLs.add(dataSnapshot.child("Image").getValue().toString());
+                        String longDesc = dataSnapshot.child("LongDesc").getValue().toString();
+                        String title = dataSnapshot.child("Title").getValue().toString();
+                        setViews(title,longDesc,mUserId,email,loc);
+                        mAdapter = new ViewPagerAdapter(mContext,mImageURLs);
+                        mViewPager.setAdapter(mAdapter);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
             }
 
             @Override
@@ -107,9 +123,6 @@ public class MyAdvDetailActivity extends AppCompatActivity {
 
             }
         });
-
-        mAdapter = new ViewPagerAdapter(this,mImageURLs);
-        mViewPager.setAdapter(mAdapter);
     }
 
     private void getIncomingExtras()

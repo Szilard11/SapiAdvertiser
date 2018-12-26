@@ -57,6 +57,7 @@ public class MyAdvsFragment extends Fragment {
 
     private void initNewsData()
     {
+        mNewsList.clear();
         mDatabase.child("sapiAdvertisments").orderByChild("UserId").equalTo(mAuth.getCurrentUser().getPhoneNumber()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot){
@@ -69,15 +70,22 @@ public class MyAdvsFragment extends Fragment {
                     newsModel.setmImage(data.child("Image").getValue().toString());
                     newsModel.setmDescription(data.child("ShortDesc").getValue().toString());
                     newsModel.setmUserId(mAuth.getCurrentUser().getPhoneNumber());
-                    mNewsList.add(newsModel);
+                    mDatabase.child("users").child(mAuth.getCurrentUser().getPhoneNumber()).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            newsModel.setmProfileImage(dataSnapshot.child("ProfileImage").getValue().toString());
+                            mNewsList.add(newsModel);
+                            mAdapter = new RecyclerViewAdapter_MyAdvs(mNewsList,mInflatedView.getContext());
+                            mRecyclerView.setAdapter(mAdapter);
+                            mRecyclerView.setLayoutManager(new LinearLayoutManager(mInflatedView.getContext()));
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
                 }
-                /*for(int i=0;i<mNewsList.size();i++)
-                {
-                    mNewsList.get(i).getmUserId();
-                }*/
-                mAdapter = new RecyclerViewAdapter_MyAdvs(mNewsList,mInflatedView.getContext());
-                mRecyclerView.setAdapter(mAdapter);
-                mRecyclerView.setLayoutManager(new LinearLayoutManager(mInflatedView.getContext()));
             }
 
             @Override
