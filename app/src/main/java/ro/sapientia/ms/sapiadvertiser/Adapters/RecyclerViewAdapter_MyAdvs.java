@@ -21,7 +21,7 @@ import ro.sapientia.ms.sapiadvertiser.R;
 
 public class RecyclerViewAdapter_MyAdvs extends RecyclerView.Adapter<RecyclerViewAdapter_MyAdvs.ViewHolder> {
 
-    private ArrayList<NewsModel> mNewsList = new ArrayList<>();
+    private ArrayList<NewsModel> mNewsList;
     private Context mContext;
 
     public RecyclerViewAdapter_MyAdvs(ArrayList<NewsModel> newsList, Context context) {

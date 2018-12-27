@@ -14,9 +14,11 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import ro.sapientia.ms.sapiadvertiser.Adapters.RecyclerViewAdapter_AllAdvs;
 import ro.sapientia.ms.sapiadvertiser.Adapters.RecyclerViewAdapter_MyAdvs;
@@ -62,29 +64,31 @@ public class MyAdvsFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot){
                 for(final DataSnapshot data : dataSnapshot.getChildren()) {
-                    final NewsModel newsModel = new NewsModel();
-                    newsModel.setmNewsId(data.getKey());
-                    newsModel.setmTitle(data.child("Title").getValue().toString());
-                    newsModel.setmCounter(parseInt(data.child("ViewCounter").getValue().toString()));
-                    //tob img is lehet fel kell bontani elsore
-                    newsModel.setmImage(data.child("Image").getValue().toString());
-                    newsModel.setmDescription(data.child("ShortDesc").getValue().toString());
-                    newsModel.setmUserId(mAuth.getCurrentUser().getPhoneNumber());
-                    mDatabase.child("users").child(mAuth.getCurrentUser().getPhoneNumber()).addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            newsModel.setmProfileImage(dataSnapshot.child("ProfileImage").getValue().toString());
-                            mNewsList.add(newsModel);
-                            mAdapter = new RecyclerViewAdapter_MyAdvs(mNewsList,mInflatedView.getContext());
-                            mRecyclerView.setAdapter(mAdapter);
-                            mRecyclerView.setLayoutManager(new LinearLayoutManager(mInflatedView.getContext()));
-                        }
+                    if (parseInt(data.child("WarningCount").getValue().toString()) < 10
+                            && parseInt(data.child("isDeleted").getValue().toString()) != 1) {
+                        final NewsModel newsModel = new NewsModel();
+                        newsModel.setmNewsId(data.getKey());
+                        newsModel.setmTitle(data.child("Title").getValue().toString());
+                        newsModel.setmCounter(parseInt(data.child("ViewCounter").getValue().toString()));
+                        newsModel.setmImage(data.child("Image").child("0").getValue().toString());
+                        newsModel.setmDescription(data.child("ShortDesc").getValue().toString());
+                        newsModel.setmUserId(mAuth.getCurrentUser().getPhoneNumber());
+                        mDatabase.child("users").child(mAuth.getCurrentUser().getPhoneNumber()).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                newsModel.setmProfileImage(dataSnapshot.child("ProfileImage").getValue().toString());
+                                mNewsList.add(newsModel);
+                                mAdapter = new RecyclerViewAdapter_MyAdvs(mNewsList, mInflatedView.getContext());
+                                mRecyclerView.setAdapter(mAdapter);
+                                mRecyclerView.setLayoutManager(new LinearLayoutManager(mInflatedView.getContext()));
+                            }
 
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                        }
-                    });
+                            }
+                        });
+                    }
                 }
             }
 

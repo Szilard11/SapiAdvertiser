@@ -24,6 +24,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import ro.sapientia.ms.sapiadvertiser.Adapters.RecyclerViewAdapter_AllAdvs;
 import ro.sapientia.ms.sapiadvertiser.Adapters.ViewPagerAdapter;
 
+import static java.lang.Integer.parseInt;
+
 public class AdvDetailActivity extends AppCompatActivity {
     private ViewPagerAdapter mAdapter;
     private ViewPager mViewPager;
@@ -37,7 +39,7 @@ public class AdvDetailActivity extends AppCompatActivity {
     private TextView mLocation;
     private TextView mUserFname;
     private CircleImageView mProfileImage;
-    private DatabaseReference mdatabase;
+    private DatabaseReference mdatabase = FirebaseDatabase.getInstance().getReference();
     private String mUserId;
     private String mNewsId;
     private Context mContext = this;
@@ -93,7 +95,23 @@ public class AdvDetailActivity extends AppCompatActivity {
             }
         });
 
-        mdatabase = FirebaseDatabase.getInstance().getReference();
+        mReportButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mdatabase.child("sapiAdvertisments").child(mNewsId).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        Integer value = parseInt(dataSnapshot.child("WarningCount").getValue().toString());
+                        mdatabase.child("sapiAdvertisments").child(mNewsId).child("WarningCount").setValue(value+1);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+            }
+        });
 
         mdatabase.child("users").child(mUserId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -105,7 +123,10 @@ public class AdvDetailActivity extends AppCompatActivity {
                 mdatabase.child("sapiAdvertisments").child(mNewsId).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        mImageURLs.add(dataSnapshot.child("Image").getValue().toString());
+                        for(DataSnapshot data : dataSnapshot.child("Image").getChildren())
+                        {
+                            mImageURLs.add(data.getValue().toString());
+                        }
                         String longDesc = dataSnapshot.child("LongDesc").getValue().toString();
                         String title = dataSnapshot.child("Title").getValue().toString();
                         setViews(title,longDesc,mUserId,email,loc,lName,profileImg);
