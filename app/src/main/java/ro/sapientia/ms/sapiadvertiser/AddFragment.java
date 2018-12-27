@@ -22,6 +22,7 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -31,6 +32,7 @@ import com.google.firebase.storage.UploadTask;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.zip.Inflater;
 
 import static android.app.Activity.RESULT_OK;
@@ -44,17 +46,14 @@ public class AddFragment extends Fragment {
     private EditText mShortDesc;
     private EditText mLongDesc;
     private EditText mPhoneNum;
-    private EditText mLocation;
     private ImageButton mAddImage;
     private View mInflatedView;
     private Button mUpload;
-    private StorageReference mStorageRef;
-    private DatabaseReference mDatabaseRef;
+    private StorageReference mStorageRef = FirebaseStorage.getInstance().getReference();;
+    private DatabaseReference mDatabaseRef = FirebaseDatabase.getInstance().getReference();
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private static final int RESULT_LOAD_IMAGE = 1;
-
-    private List<String> fileNameList = new ArrayList<>();
-    private List<String> fileDoneList = new ArrayList<>();
-
+    private List<Uri> filePath = new ArrayList<>();
 
     public AddFragment() {
         // Required empty public constructor
@@ -70,11 +69,11 @@ public class AddFragment extends Fragment {
         mShortDesc = mInflatedView.findViewById(R.id.editText_shortDesc);
         mLongDesc = mInflatedView.findViewById(R.id.editText_longDesc);
         mPhoneNum = mInflatedView.findViewById(R.id.editText_phone);
-        mLocation = mInflatedView.findViewById(R.id.editText_Location);
         mAddImage = mInflatedView.findViewById(R.id.imageButton_add);
         mUpload = mInflatedView.findViewById(R.id.button_Upload);
-        mStorageRef = FirebaseStorage.getInstance().getReference();
-        mDatabaseRef = FirebaseDatabase.getInstance().getReference();
+
+        mPhoneNum.setEnabled(false);
+        mPhoneNum.setText(mAuth.getCurrentUser().getPhoneNumber());
 
         mAddImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,7 +89,6 @@ public class AddFragment extends Fragment {
         mUpload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TOdo lecsekkolni a kitoltott mezoket
                 uploadAdv();
             }
         });
@@ -98,70 +96,69 @@ public class AddFragment extends Fragment {
     }
 
     private void uploadAdv() {
-        //TODO megoldani a feltoltest
+        String key = String.valueOf(System.currentTimeMillis());
+        String longDesc = mLongDesc.getText().toString();
+        String shortDesc = mShortDesc.getText().toString();
+        String title = mTitle.getText().toString();
+
+        if(shortDesc != "" && title != "" && filePath.size()>0) {
+            mDatabaseRef.child("sapiAdvertisments").child(key).child("LongDesc").setValue(longDesc);
+            mDatabaseRef.child("sapiAdvertisments").child(key).child("ShortDesc").setValue(shortDesc);
+            mDatabaseRef.child("sapiAdvertisments").child(key).child("Title").setValue(title);
+            mDatabaseRef.child("sapiAdvertisments").child(key).child("UserId").setValue(mAuth.getCurrentUser().getPhoneNumber());
+            mDatabaseRef.child("sapiAdvertisments").child(key).child("ViewCounter").setValue(0);
+            mDatabaseRef.child("sapiAdvertisments").child(key).child("WarningCount").setValue(0);
+            mDatabaseRef.child("sapiAdvertisments").child(key).child("isDeleted").setValue(0);
+            uploadImages(key);
+        }
+        else {
+            Toast.makeText(getActivity(), "You must fill out all the fields!", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK){
+        if(requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && data != null){
 
             if(data.getClipData() != null){
 
                 int totalItemsSelected = data.getClipData().getItemCount();
-
                 for(int i = 0; i < totalItemsSelected; i++){
-
                     Uri fileUri = data.getClipData().getItemAt(i).getUri();
+                    filePath.add(fileUri);
 
-                    String fileName = getFileName(fileUri);
-
-                    fileNameList.add(fileName);
-                    fileDoneList.add("uploading");
-
-
-                    String timestamp = String.valueOf(System.currentTimeMillis());
-                    String fName =  timestamp + String.valueOf(i);
-
-                    StorageReference fileToUpload = mStorageRef.child("Images").child(fName);
-
-                    final int finalI = i;
-                    fileToUpload.putFile(fileUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-
-                            fileDoneList.remove(finalI);
-                            fileDoneList.add(finalI, "done");
-                        }
-                    });
                 }
-                Toast.makeText(getActivity(), "Selected Multiple Files", Toast.LENGTH_SHORT).show();
             }
             else if (data.getData() != null){
-                Toast.makeText(getActivity(), "Selected Single File", Toast.LENGTH_SHORT).show();
+                Uri fileUri = data.getData();
+                filePath.add(fileUri);
             }
         }
     }
 
-    public String getFileName(Uri uri) {
-        String result = null;
-        if (uri.getScheme().equals("content")) {
-            Cursor cursor = getActivity().getContentResolver().query(uri, null, null, null, null);
-            try {
-                if (cursor != null && cursor.moveToFirst()) {
-                    result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+    private Integer num = 0;
+    public void uploadImages(final String childName){
+        for(int i=0;i<filePath.size();i++) {
+            final StorageReference fileToUpload = mStorageRef.child("Images").child(UUID.randomUUID().toString());
+            fileToUpload.putFile(filePath.get(i)).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    fileToUpload.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            mDatabaseRef.child("sapiAdvertisments").child(childName).child("Image").child(num.toString()).setValue(uri.toString());
+                            num++;
+                        }
+                    });
+
                 }
-            } finally {
-                cursor.close();
-            }
+            });
         }
-        if (result == null) {
-            result = uri.getPath();
-            int cut = result.lastIndexOf('/');
-            if (cut != -1) {
-                result = result.substring(cut + 1);
-            }
-        }
-        return result;
+        Toast.makeText(getActivity(), "Advertisment uploaded", Toast.LENGTH_SHORT).show();
+        mShortDesc.setText("");
+        mLongDesc.setText("");
+        mTitle.setText("");
+        filePath.clear();
     }
 }

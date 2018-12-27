@@ -85,39 +85,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editText_longDesc" />
 
-    <EditText
-        android:id="@+id/editText_Location"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginBottom="5dp"
-        android:background="@color/common_google_signin_btn_text_light_disabled"
-        android:ems="10"
-        android:hint="Location text"
-        android:inputType="textPersonName"
-        android:padding="8dp"
-        android:textColor="@android:color/black"
-        android:textColorHint="@android:color/darker_gray"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText_phone"
-        app:layout_constraintVertical_bias="0.0" />
-
     <ImageButton
         android:id="@+id/imageButton_add"
         android:layout_width="82dp"
         android:layout_height="85dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="436dp"
         android:background="@android:color/background_light"
         android:src="@drawable/baseline_add_photo_alternate_black_48dp"
         android:textColor="@android:color/black"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText_Location" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/button_Upload"
