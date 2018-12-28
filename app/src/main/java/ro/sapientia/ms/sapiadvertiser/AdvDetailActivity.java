@@ -1,6 +1,8 @@
 package ro.sapientia.ms.sapiadvertiser;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
@@ -91,25 +93,7 @@ public class AdvDetailActivity extends AppCompatActivity {
         mReportButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-            }
-        });
-
-        mReportButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mdatabase.child("sapiAdvertisments").child(mNewsId).addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        Integer value = parseInt(dataSnapshot.child("WarningCount").getValue().toString());
-                        mdatabase.child("sapiAdvertisments").child(mNewsId).child("WarningCount").setValue(value+1);
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                });
+                ReportDialog();
             }
         });
 
@@ -157,4 +141,43 @@ public class AdvDetailActivity extends AppCompatActivity {
             mNewsId = getIntent().getStringExtra("news_id");
         }
     }
+
+    public void ReportDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setTitle("Sapi Advertiser");
+        builder.setMessage("Are you sure you want report this advertisment?");
+
+        builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface dialog, int which) {
+                // Do do my action here
+                mdatabase.child("sapiAdvertisments").child(mNewsId).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        Integer value = parseInt(dataSnapshot.child("WarningCount").getValue().toString());
+                        mdatabase.child("sapiAdvertisments").child(mNewsId).child("WarningCount").setValue(value+1);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+                dialog.dismiss();
+            }
+        });
+
+        builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
 }

@@ -1,6 +1,8 @@
 package ro.sapientia.ms.sapiadvertiser;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
@@ -32,6 +34,7 @@ public class MyAdvDetailActivity extends AppCompatActivity {
     private Button mShareButton;
     private Button mDeleteButton;
     private Button mEditButton;
+    private Button mSaveButton;
     private TextView mTitle;
     private TextView mLongDesc;
     private TextView mPhone;
@@ -42,6 +45,9 @@ public class MyAdvDetailActivity extends AppCompatActivity {
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private String mUserId = mAuth.getCurrentUser().getPhoneNumber();
     private Context mContext = this;
+    private String mOldTitle;
+    private String mOldLongDesc;
+
 
     public void setViews(String pTitle,String pLongdesc,String pPhone,String pEmail,String pLocation){
         this.mTitle.setText(pTitle);
@@ -55,17 +61,18 @@ public class MyAdvDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_adv_detail);
-        //mImageURLs.add("https://www.gettyimages.ie/gi-resources/images/Homepage/Hero/UK/CMS_Creative_164657191_Kingfisher.jpg");
-        //mImageURLs.add("https://wallpaperbrowse.com/media/images/3848765-wallpaper-images-download.jpg");
         mViewPager = findViewById(R.id.view_pager2);
         mShareButton = findViewById(R.id.my_adv_det_share_butt);
-        mDeleteButton= findViewById(R.id.my_adv_det_delete_butt);
-        mEditButton=findViewById(R.id.my_adv_det_edit_butt);
+        mDeleteButton = findViewById(R.id.my_adv_det_delete_butt);
+        mSaveButton = findViewById(R.id.my_adv_det_save_butt);
+        mEditButton = findViewById(R.id.my_adv_det_edit_butt);
         mTitle = findViewById(R.id.my_adv_det_title);
         mLongDesc = findViewById(R.id.my_adv_det_longdesc);
         mPhone = findViewById(R.id.my_adv_det_phone);
         mEmail = findViewById(R.id.my_adv_det_email);
         mLocation = findViewById(R.id.my_adv_det_location);
+
+        mSaveButton.setVisibility(View.INVISIBLE);
 
         getIncomingExtras();
         final Intent sharingIntent=new Intent(Intent.ACTION_SEND);
@@ -92,7 +99,20 @@ public class MyAdvDetailActivity extends AppCompatActivity {
         mEditButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                mLongDesc.setEnabled(true);
+                mTitle.setEnabled(true);
+                mDeleteButton.setEnabled(false);
+                mShareButton.setEnabled(false);
+                mSaveButton.setVisibility(View.VISIBLE);
+            }
+        });
 
+        mSaveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SaveDialog();
+                mdatabase.child("sapiAdvertisments").child(mNewsId).child("LongDesc").setValue(mLongDesc.getText().toString());
+                mdatabase.child("sapiAdvertisments").child(mNewsId).child("Title").setValue(mTitle.getText().toString());
             }
         });
 
@@ -110,6 +130,8 @@ public class MyAdvDetailActivity extends AppCompatActivity {
                         }
                         String longDesc = dataSnapshot.child("LongDesc").getValue().toString();
                         String title = dataSnapshot.child("Title").getValue().toString();
+                        mOldLongDesc = longDesc;
+                        mOldTitle = title;
                         setViews(title, longDesc, mUserId, email, loc);
                         mAdapter = new ViewPagerAdapter(mContext, mImageURLs);
                         mViewPager.setAdapter(mAdapter);
@@ -129,6 +151,7 @@ public class MyAdvDetailActivity extends AppCompatActivity {
         });
     }
 
+
     private void getIncomingExtras()
     {
         if(getIntent().hasExtra("news_id"))
@@ -136,4 +159,45 @@ public class MyAdvDetailActivity extends AppCompatActivity {
             mNewsId = getIntent().getStringExtra("news_id");
         }
     }
+
+    public void SaveDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setTitle("Sapi Advertiser");
+        builder.setMessage("Are you sure you want save?");
+
+        builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface dialog, int which) {
+                // Do do my action here
+                mdatabase.child("sapiAdvertisments").child(mNewsId).child("LongDesc").setValue(mLongDesc.getText().toString());
+                mdatabase.child("sapiAdvertisments").child(mNewsId).child("Title").setValue(mTitle.getText().toString());
+                mLongDesc.setEnabled(false);
+                mTitle.setEnabled(false);
+                mDeleteButton.setEnabled(true);
+                mShareButton.setEnabled(true);
+                mSaveButton.setVisibility(View.INVISIBLE);
+                dialog.dismiss();
+            }
+        });
+
+        builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                mLongDesc.setText(mOldLongDesc);
+                mTitle.setText(mOldTitle);
+                mLongDesc.setEnabled(false);
+                mTitle.setEnabled(false);
+                mDeleteButton.setEnabled(true);
+                mShareButton.setEnabled(true);
+                mSaveButton.setVisibility(View.INVISIBLE);
+                dialog.dismiss();
+            }
+        });
+
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
 }
