@@ -10,22 +10,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.bumptech.glide.Glide;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
 import java.util.ArrayList;
-import java.util.Collections;
-
 import de.hdodenhof.circleimageview.CircleImageView;
-import ro.sapientia.ms.sapiadvertiser.AdvDetailActivity;
+import ro.sapientia.ms.sapiadvertiser.Activities.AdvDetailActivity;
 import ro.sapientia.ms.sapiadvertiser.NewsModel;
 import ro.sapientia.ms.sapiadvertiser.R;
-
 import static java.lang.Integer.parseInt;
 
 public class RecyclerViewAdapter_AllAdvs extends RecyclerView.Adapter<RecyclerViewAdapter_AllAdvs.ViewHolder> {

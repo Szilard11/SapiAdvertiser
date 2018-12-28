@@ -1,4 +1,4 @@
-package ro.sapientia.ms.sapiadvertiser;
+package ro.sapientia.ms.sapiadvertiser.Activities;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -9,6 +9,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
+
+import ro.sapientia.ms.sapiadvertiser.Fragments.AddFragment;
+import ro.sapientia.ms.sapiadvertiser.Fragments.HomeFragment;
+import ro.sapientia.ms.sapiadvertiser.Fragments.PersonFragment;
+import ro.sapientia.ms.sapiadvertiser.R;
 
 public class NewsActivity extends AppCompatActivity {
 
@@ -57,7 +62,7 @@ public class NewsActivity extends AppCompatActivity {
     }
 
     private void setFragment(Fragment fragment) {
-        FragmentTransaction fragmentTransaction=getSupportFragmentManager().beginTransaction();
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.main_frame,fragment);
         fragmentTransaction.commit();
     }

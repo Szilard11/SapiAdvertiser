@@ -1,26 +1,16 @@
-package ro.sapientia.ms.sapiadvertiser;
+package ro.sapientia.ms.sapiadvertiser.Fragments;
 
-
-import android.content.ContentResolver;
 import android.content.Intent;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.provider.OpenableColumns;
 import android.support.v4.app.Fragment;
-import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
-
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
@@ -28,15 +18,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.zip.Inflater;
+
+import ro.sapientia.ms.sapiadvertiser.R;
 
 import static android.app.Activity.RESULT_OK;
-
 
 /**
  * A simple {@link Fragment} subclass.
@@ -138,7 +126,7 @@ public class AddFragment extends Fragment {
     }
 
     private Integer num = 0;
-    public void uploadImages(final String childName){
+    private void uploadImages(final String childName){
         for(int i=0;i<filePath.size();i++) {
             final StorageReference fileToUpload = mStorageRef.child("Images").child(UUID.randomUUID().toString());
             fileToUpload.putFile(filePath.get(i)).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {

@@ -1,10 +1,5 @@
 package ro.sapientia.ms.sapiadvertiser;
 
-import android.widget.ImageView;
-import android.widget.TextView;
-
-import de.hdodenhof.circleimageview.CircleImageView;
-
 public class NewsModel {
 
     private String mTitle;
