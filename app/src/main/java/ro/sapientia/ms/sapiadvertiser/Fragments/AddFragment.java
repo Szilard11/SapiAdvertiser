@@ -70,6 +70,7 @@ public class AddFragment extends Fragment {
                 intent.setType("image/*");
                 intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
                 intent.setAction(Intent.ACTION_GET_CONTENT);
+                filePath.clear();
                 startActivityForResult(Intent.createChooser(intent,"Select Picture"), RESULT_LOAD_IMAGE);
             }
         });
@@ -122,6 +123,7 @@ public class AddFragment extends Fragment {
                 Uri fileUri = data.getData();
                 filePath.add(fileUri);
             }
+            //TODO: ide recview
         }
     }
 
@@ -137,9 +139,12 @@ public class AddFragment extends Fragment {
                         public void onSuccess(Uri uri) {
                             mDatabaseRef.child("sapiAdvertisments").child(childName).child("Image").child(num.toString()).setValue(uri.toString());
                             num++;
+                            /*if(num == filePath.size()-1)
+                            {
+                                filePath.clear();
+                            }*/
                         }
                     });
-
                 }
             });
         }
@@ -147,6 +152,5 @@ public class AddFragment extends Fragment {
         mShortDesc.setText("");
         mLongDesc.setText("");
         mTitle.setText("");
-        filePath.clear();
     }
 }

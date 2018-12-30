@@ -64,6 +64,7 @@ public class PersonFragment extends Fragment {
     private String m_oldLName;
     private String m_oldPhoneNr;
     private String m_oldEmail;
+    private String m_oldAddress;
 
     private DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
@@ -141,6 +142,7 @@ public class PersonFragment extends Fragment {
                 m_oldLName = mLName.getText().toString();
                 m_oldPhoneNr = mPhoneNr.getText().toString();
                 m_oldEmail = mEmail.getText().toString();
+                m_oldAddress = mAddress.getText().toString();
                 mEdit_Button.setClickable(false);
                 mSave_Button.setClickable(true);
                 mProfileImage.setEnabled(true);
@@ -165,6 +167,7 @@ public class PersonFragment extends Fragment {
                 String newLName = mLName.getText().toString();
                 String newEmail = mEmail.getText().toString();
                 String newPhoneNr = mPhoneNr.getText().toString();
+                String newAddress = mAddress.getText().toString();
 
                 String regexStr = "^[+][0-9]{10,13}$";
                 if(newPhoneNr.matches(regexStr))
@@ -180,6 +183,10 @@ public class PersonFragment extends Fragment {
                     if (m_oldEmail != newEmail) {
                         mDatabase.child("users").child(mUserNr).child("Email").setValue(newEmail);
                         //email = true;
+                    }
+                    if(m_oldAddress != newAddress)
+                    {
+                        mDatabase.child("users").child(mUserNr).child("Address").setValue(newAddress);
                     }
                     /*if (m_oldPhoneNr != newPhoneNr) {
                         mDatabase.child(mUserNr).setValue(newPhoneNr);
@@ -240,6 +247,7 @@ public class PersonFragment extends Fragment {
                                 @Override
                                 public void onSuccess(Uri uri) {
                                     mDatabase.child("users").child(mUserNr).child("ProfileImage").setValue(uri.toString());
+                                    filePath = null;
                                 }
                             });
                             progressDialog.dismiss();

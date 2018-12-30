@@ -15,6 +15,12 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.concurrent.TimeUnit;
 
 import ro.sapientia.ms.sapiadvertiser.R;
@@ -26,9 +32,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private Button mGetCode;
     private Button mLogin;
     private String mVerificationCode;
+    DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
     //private Spinner mCountryCode;
 
-    private FirebaseAuth mAuth;
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     //private PhonePrefix prefix = new PhonePrefix();
 
     @Override
@@ -48,18 +55,51 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         mLogin.setOnClickListener(this);
         mGetCode.setOnClickListener(this);
 
-        mAuth = FirebaseAuth.getInstance();
-
         if(mAuth.getCurrentUser() != null)
         {
-            Intent intent = new Intent(LoginActivity.this, NewsActivity.class);
-            intent.setFlags(intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
+            mDatabase.child("users").child(mAuth.getCurrentUser().getPhoneNumber()).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if(dataSnapshot.exists())
+                    {
+                        if(!dataSnapshot.child("FirstName").getValue().toString().isEmpty() &&
+                                !dataSnapshot.child("LastName").getValue().toString().isEmpty() &&
+                                !dataSnapshot.child("Email").getValue().toString().isEmpty() &&
+                                !dataSnapshot.child("Address").getValue().toString().isEmpty() &&
+                                !dataSnapshot.child("ProfileImage").getValue().toString().isEmpty())
+                        {
+                            Intent intent = new Intent(LoginActivity.this, NewsActivity.class);
+                            intent.setFlags(intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
+                        }
+                        else
+                        {
+                            Intent intent = new Intent(LoginActivity.this, NewsActivity.class);
+                            intent.setFlags(intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            intent.putExtra("newUser","true");
+                            startActivity(intent);
+                        }
+                    }
+                    else
+                    {
+                        newUser(mAuth.getCurrentUser().getPhoneNumber());
+                        Intent intent = new Intent(LoginActivity.this, NewsActivity.class);
+                        intent.setFlags(intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        intent.putExtra("newUser","true");
+                        startActivity(intent);
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+
         }
         //ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this,android.R.layout.simple_spinner_dropdown_item,prefix.getList());
         //spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         //mCountryCode.setAdapter(spinnerAdapter);
-
     }
 
     @Override
@@ -107,8 +147,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful())
                         {
+                            newUser(mPhoneNr.getText().toString());
                             Intent intent = new Intent(LoginActivity.this, NewsActivity.class);
                             intent.setFlags(intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            intent.putExtra("newUser","true");
                             startActivity(intent);
                         }
                         else
@@ -158,4 +200,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             mPhoneNr.setText("");
         }
     };
+
+    private void newUser(String userId)
+    {
+        mDatabase.child("users").child(userId).child("FirstName").setValue("");
+        mDatabase.child("users").child(userId).child("LastName").setValue("");
+        mDatabase.child("users").child(userId).child("Address").setValue("");
+        mDatabase.child("users").child(userId).child("Email").setValue("");
+        mDatabase.child("users").child(userId).child("ProfileImage").setValue("");
+    }
 }
