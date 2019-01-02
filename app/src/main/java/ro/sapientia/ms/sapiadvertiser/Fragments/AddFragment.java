@@ -3,7 +3,10 @@ package ro.sapientia.ms.sapiadvertiser.Fragments;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,17 +14,22 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCanceledListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import ro.sapientia.ms.sapiadvertiser.Adapters.RecyclerViewAdapter_LoadImages;
 import ro.sapientia.ms.sapiadvertiser.R;
 
 import static android.app.Activity.RESULT_OK;
@@ -42,6 +50,8 @@ public class AddFragment extends Fragment {
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private static final int RESULT_LOAD_IMAGE = 1;
     private List<Uri> filePath = new ArrayList<>();
+    private RecyclerView mRecyclerView;
+    private RecyclerViewAdapter_LoadImages mAdapter;
 
     public AddFragment() {
         // Required empty public constructor
@@ -59,6 +69,7 @@ public class AddFragment extends Fragment {
         mPhoneNum = mInflatedView.findViewById(R.id.editText_phone);
         mAddImage = mInflatedView.findViewById(R.id.imageButton_add);
         mUpload = mInflatedView.findViewById(R.id.button_Upload);
+        mRecyclerView = mInflatedView.findViewById(R.id.recyclerView);
 
         mPhoneNum.setEnabled(false);
         mPhoneNum.setText(mAuth.getCurrentUser().getPhoneNumber());
@@ -70,7 +81,6 @@ public class AddFragment extends Fragment {
                 intent.setType("image/*");
                 intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
                 intent.setAction(Intent.ACTION_GET_CONTENT);
-                filePath.clear();
                 startActivityForResult(Intent.createChooser(intent,"Select Picture"), RESULT_LOAD_IMAGE);
             }
         });
@@ -81,6 +91,9 @@ public class AddFragment extends Fragment {
                 uploadAdv();
             }
         });
+        mAdapter = new RecyclerViewAdapter_LoadImages(filePath, mInflatedView.getContext());
+        mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(mInflatedView.getContext(),LinearLayoutManager.HORIZONTAL,false));
         return this.mInflatedView;
     }
 
@@ -123,7 +136,7 @@ public class AddFragment extends Fragment {
                 Uri fileUri = data.getData();
                 filePath.add(fileUri);
             }
-            //TODO: ide recview
+            mAdapter.notifyDataSetChanged();
         }
     }
 
@@ -139,13 +152,8 @@ public class AddFragment extends Fragment {
                         public void onSuccess(Uri uri) {
                             mDatabaseRef.child("sapiAdvertisments").child(childName).child("Image").child(num.toString()).setValue(uri.toString());
                             num++;
-                            /*if(num == filePath.size()-1)
-                            {
-                                filePath.clear();
-                            }*/
-                        }
-                    });
-                }
+                            }});
+                    }
             });
         }
         Toast.makeText(getActivity(), "Advertisment uploaded", Toast.LENGTH_SHORT).show();

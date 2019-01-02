@@ -45,33 +45,36 @@ public class HomeFragment extends Fragment {
         //initNewsData();
 
         mNewsList.clear();
-        mDatabase.child("sapiAdvertisments").orderByKey().addValueEventListener(new ValueEventListener() {
+        //TODO: NULL pointer excep. kezelni !!!!!!!!!!!!!!!!!!!!!!!!
+        mDatabase.child("sapiAdvertisments").orderByKey().addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                mNewsList.clear();
-                for(final DataSnapshot data : dataSnapshot.getChildren()) {
-                    if (parseInt(data.child("WarningCount").getValue().toString()) < 10
-                            && parseInt(data.child("isDeleted").getValue().toString()) != 1) {
-                        final NewsModel newsModel = new NewsModel();
-                        newsModel.setmNewsId(data.getKey());
-                        newsModel.setmTitle(data.child("Title").getValue().toString());
-                        newsModel.setmCounter(parseInt(data.child("ViewCounter").getValue().toString()));
-                        newsModel.setmImage(data.child("Image").child("0").getValue().toString());
-                        newsModel.setmDescription(data.child("ShortDesc").getValue().toString());
-                        newsModel.setmUserId(data.child("UserId").getValue().toString());
-                        mDatabase.child("users").child(data.child("UserId").getValue().toString()).addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                newsModel.setmProfileImage(dataSnapshot.child("ProfileImage").getValue().toString());
-                                mNewsList.add(newsModel);
-                                mAdapter.notifyDataSetChanged();
-                            }
+                if(dataSnapshot.exists()) {
+                    mNewsList.clear();
+                    for (final DataSnapshot data : dataSnapshot.getChildren()) {
+                        if (parseInt(data.child("WarningCount").getValue().toString()) < 10
+                                && parseInt(data.child("isDeleted").getValue().toString()) != 1) {
+                            final NewsModel newsModel = new NewsModel();
+                            newsModel.setmNewsId(data.getKey());
+                            newsModel.setmTitle(data.child("Title").getValue().toString());
+                            newsModel.setmCounter(parseInt(data.child("ViewCounter").getValue().toString()));
+                            newsModel.setmImage(data.child("Image").child("0").getValue().toString());
+                            newsModel.setmDescription(data.child("ShortDesc").getValue().toString());
+                            newsModel.setmUserId(data.child("UserId").getValue().toString());
+                            mDatabase.child("users").child(data.child("UserId").getValue().toString()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    newsModel.setmProfileImage(dataSnapshot.child("ProfileImage").getValue().toString());
+                                    mNewsList.add(newsModel);
+                                    mAdapter.notifyDataSetChanged();
+                                }
 
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                            }
-                        });
+                                }
+                            });
+                        }
                     }
                 }
             }
@@ -87,46 +90,4 @@ public class HomeFragment extends Fragment {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mInflatedView.getContext()));
         return this.mInflatedView;
     }
-
-    /*public void initNewsData()
-    {
-        mNewsList.clear();
-        mDatabase.child("sapiAdvertisments").orderByKey().addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot){
-                for(final DataSnapshot data : dataSnapshot.getChildren()) {
-                    if (parseInt(data.child("WarningCount").getValue().toString()) < 10
-                            && parseInt(data.child("isDeleted").getValue().toString()) != 1) {
-                        final NewsModel newsModel = new NewsModel();
-                        newsModel.setmNewsId(data.getKey());
-                        newsModel.setmTitle(data.child("Title").getValue().toString());
-                        newsModel.setmCounter(parseInt(data.child("ViewCounter").getValue().toString()));
-                        newsModel.setmImage(data.child("Image").child("0").getValue().toString());
-                        newsModel.setmDescription(data.child("ShortDesc").getValue().toString());
-                        newsModel.setmUserId(data.child("UserId").getValue().toString());
-                        mDatabase.child("users").child(data.child("UserId").getValue().toString()).addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                newsModel.setmProfileImage(dataSnapshot.child("ProfileImage").getValue().toString());
-                                mNewsList.add(newsModel);
-                                mAdapter = new RecyclerViewAdapter_AllAdvs(mNewsList, mInflatedView.getContext());
-                                mRecyclerView.setAdapter(mAdapter);
-                                mRecyclerView.setLayoutManager(new LinearLayoutManager(mInflatedView.getContext()));
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                            }
-                        });
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-    }*/
 }

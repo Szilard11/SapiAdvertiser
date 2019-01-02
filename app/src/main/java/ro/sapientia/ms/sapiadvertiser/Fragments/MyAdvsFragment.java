@@ -43,51 +43,7 @@ public class MyAdvsFragment extends Fragment {
         this.mInflatedView = inflater.inflate(R.layout.fragment_my_advs, container, false);
 
         mRecyclerView = mInflatedView.findViewById(R.id.recyclerView);
-        //initNewsData();
 
-        mNewsList.clear();
-        mDatabase.child("sapiAdvertisments").orderByChild("UserId").equalTo(mAuth.getCurrentUser().getPhoneNumber()).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot){
-                for(final DataSnapshot data : dataSnapshot.getChildren()) {
-                    if (parseInt(data.child("WarningCount").getValue().toString()) < 10
-                            && parseInt(data.child("isDeleted").getValue().toString()) != 1) {
-                        final NewsModel newsModel = new NewsModel();
-                        newsModel.setmNewsId(data.getKey());
-                        newsModel.setmTitle(data.child("Title").getValue().toString());
-                        newsModel.setmCounter(parseInt(data.child("ViewCounter").getValue().toString()));
-                        newsModel.setmImage(data.child("Image").child("0").getValue().toString());
-                        newsModel.setmDescription(data.child("ShortDesc").getValue().toString());
-                        newsModel.setmUserId(mAuth.getCurrentUser().getPhoneNumber());
-                        mDatabase.child("users").child(mAuth.getCurrentUser().getPhoneNumber()).addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                newsModel.setmProfileImage(dataSnapshot.child("ProfileImage").getValue().toString());
-                                mNewsList.add(newsModel);
-                                mAdapter = new RecyclerViewAdapter_MyAdvs(mNewsList, mInflatedView.getContext());
-                                mRecyclerView.setAdapter(mAdapter);
-                                mRecyclerView.setLayoutManager(new LinearLayoutManager(mInflatedView.getContext()));
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                            }
-                        });
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-        return this.mInflatedView;
-    }
-
-    /*private void initNewsData()
-    {
         mNewsList.clear();
         mDatabase.child("sapiAdvertisments").orderByChild("UserId").equalTo(mAuth.getCurrentUser().getPhoneNumber()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -126,5 +82,6 @@ public class MyAdvsFragment extends Fragment {
 
             }
         });
-    }*/
+        return this.mInflatedView;
+    }
 }

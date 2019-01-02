@@ -32,7 +32,7 @@ public class NewsActivity extends AppCompatActivity {
     private HomeFragment homeFragment;
     private AddFragment addFragment;
     private PersonFragment personFragment;
-    private Boolean mNewUser = false;
+    private Boolean mNewUser = true;
     private DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
@@ -47,16 +47,8 @@ public class NewsActivity extends AppCompatActivity {
         addFragment = new AddFragment();
         personFragment = new PersonFragment();
 
-        if(getIntent().hasExtra("newUser") && Boolean.valueOf(getIntent().getStringExtra("newUser")))
-        {
-            mNewUser = true;
-            mMainNav.setSelectedItemId(R.id.nav_person);
-            setFragment(personFragment);
-        }
-        else {
-            mMainNav.setSelectedItemId(R.id.nav_home);
-            setFragment(homeFragment);
-        }
+        mMainNav.setSelectedItemId(R.id.nav_home);
+        setFragment(homeFragment);
         mMainNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {

@@ -76,7 +76,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         {
                             Intent intent = new Intent(LoginActivity.this, NewsActivity.class);
                             intent.setFlags(intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            intent.putExtra("newUser","true");
                             startActivity(intent);
                         }
                     }
@@ -85,7 +84,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         newUser(mAuth.getCurrentUser().getPhoneNumber());
                         Intent intent = new Intent(LoginActivity.this, NewsActivity.class);
                         intent.setFlags(intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        intent.putExtra("newUser","true");
                         startActivity(intent);
                     }
                 }
@@ -147,11 +145,27 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful())
                         {
-                            newUser(mPhoneNr.getText().toString());
-                            Intent intent = new Intent(LoginActivity.this, NewsActivity.class);
-                            intent.setFlags(intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            intent.putExtra("newUser","true");
-                            startActivity(intent);
+                            mDatabase.child("users").child(mPhoneNr.getText().toString()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    if (dataSnapshot.exists()) {
+                                        Intent intent = new Intent(LoginActivity.this, NewsActivity.class);
+                                        intent.setFlags(intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                        startActivity(intent);
+                                    }
+                                    else
+                                    {
+                                        newUser(mPhoneNr.getText().toString());
+                                        Intent intent = new Intent(LoginActivity.this, NewsActivity.class);
+                                        intent.setFlags(intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                        startActivity(intent);
+                                    }
+                                }
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                    }
+                                });
                         }
                         else
                         {
