@@ -70,15 +70,19 @@ public class AdvDetailActivity extends AppCompatActivity {
         mProfileImage = findViewById(R.id.circleImageView2);
 
         getIncomingExtras();
-        final Intent sharingIntent = new Intent(Intent.ACTION_SEND);
-        sharingIntent.setType("text/plain");
-        String shareBody = "Here is the share content body";
-        sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Subject Here");
-        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
+
 
         mShareButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                final Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+                sharingIntent.setType("text/plain");
+                String shareBody = mTitle.getText().toString() + "\n\n" + mLongDesc.getText().toString() + "\n\n" + "Images:" + "\n";
+                for(int i = 0;i < mImageURLs.size();i++){
+                    shareBody += mImageURLs.get(i) + "\n";
+                }
+                sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Sapi Advertisment");
+                sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
                 startActivity(Intent.createChooser(sharingIntent, "Share via"));
             }
         });
