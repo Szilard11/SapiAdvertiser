@@ -45,7 +45,6 @@ public class HomeFragment extends Fragment {
         //initNewsData();
 
         mNewsList.clear();
-        //TODO: NULL pointer excep. kezelni !!!!!!!!!!!!!!!!!!!!!!!!
         mDatabase.child("sapiAdvertisments").orderByKey().addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

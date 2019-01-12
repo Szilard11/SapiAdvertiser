@@ -33,10 +33,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private Button mLogin;
     private String mVerificationCode;
     DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
-    //private Spinner mCountryCode;
 
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
-    //private PhonePrefix prefix = new PhonePrefix();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +45,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         mLogin = findViewById(R.id.button_login);
         mCode = findViewById(R.id.editText_code);
         mGetCode = findViewById(R.id.button_getCode);
-        //mCountryCode = findViewById(R.id.spinner_counterycode);
 
         mLogin.setVisibility(View.INVISIBLE);
         mCode.setVisibility(View.INVISIBLE);
@@ -95,9 +92,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             });
 
         }
-        //ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this,android.R.layout.simple_spinner_dropdown_item,prefix.getList());
-        //spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        //mCountryCode.setAdapter(spinnerAdapter);
     }
 
     @Override
@@ -105,9 +99,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         switch (view.getId()) {
             case R.id.button_getCode:
                 String phoneNr = mPhoneNr.getText().toString();
-
-                //String countryPrefix = prefix.prefixFor(mCountryCode.getSelectedItem().toString());
-                //String finalPhoneNr = countryPrefix + phoneNr;
 
                 if(phoneNr.isEmpty() || phoneNr.length()!=12)
                 {

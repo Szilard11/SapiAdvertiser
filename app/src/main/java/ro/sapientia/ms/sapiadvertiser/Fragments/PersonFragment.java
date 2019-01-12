@@ -34,7 +34,6 @@ import java.io.IOException;
 import java.util.UUID;
 import de.hdodenhof.circleimageview.CircleImageView;
 import ro.sapientia.ms.sapiadvertiser.Activities.LoginActivity;
-import ro.sapientia.ms.sapiadvertiser.Fragments.MyAdvsFragment;
 import ro.sapientia.ms.sapiadvertiser.R;
 
 import static android.app.Activity.RESULT_OK;
@@ -57,12 +56,9 @@ public class PersonFragment extends Fragment {
     private final int PICK_IMAGE_REQUEST = 71;
     private Uri filePath;
     private StorageReference mStorageRef = FirebaseStorage.getInstance().getReference("ProfileImages");
-    private boolean mIsImageUpdated = false;
-    private String mNewImageUrl;
 
     private String m_oldFName;
     private String m_oldLName;
-    private String m_oldPhoneNr;
     private String m_oldEmail;
     private String m_oldAddress;
 
@@ -140,7 +136,6 @@ public class PersonFragment extends Fragment {
             public void onClick(View view) {
                 m_oldFName = mFName.getText().toString();
                 m_oldLName = mLName.getText().toString();
-                m_oldPhoneNr = mPhoneNr.getText().toString();
                 m_oldEmail = mEmail.getText().toString();
                 m_oldAddress = mAddress.getText().toString();
                 mEdit_Button.setClickable(false);
@@ -148,7 +143,6 @@ public class PersonFragment extends Fragment {
                 mProfileImage.setEnabled(true);
                 mFName.setEnabled(true);
                 mLName.setEnabled(true);
-                mPhoneNr.setEnabled(true);
                 mAddress.setEnabled(true);
                 mEmail.setEnabled(true);
                 mLogOff_Button.setClickable(false);
@@ -158,59 +152,35 @@ public class PersonFragment extends Fragment {
         mSave_Button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO::Database update? Validate entered texts? Edit kozben nincs mashva menes vagy regi marad?
-                /*Boolean fName = false;
-                Boolean lName = false;
-                Boolean email = false;
-                Boolean phoneNr = false;*/
                 String newFName = mFName.getText().toString();
                 String newLName = mLName.getText().toString();
                 String newEmail = mEmail.getText().toString();
-                String newPhoneNr = mPhoneNr.getText().toString();
                 String newAddress = mAddress.getText().toString();
-
-                String regexStr = "^[+][0-9]{10,13}$";
-                if(newPhoneNr.matches(regexStr))
-                {
-                    if (m_oldFName != newFName) {
-                        mDatabase.child("users").child(mUserNr).child("FirstName").setValue(newFName);
-                        //fName = true;
-                    }
-                    if (m_oldLName != newLName) {
-                        mDatabase.child("users").child(mUserNr).child("LastName").setValue(newLName);
-                        //lName = true;
-                    }
-                    if (m_oldEmail != newEmail) {
-                        mDatabase.child("users").child(mUserNr).child("Email").setValue(newEmail);
-                        //email = true;
-                    }
-                    if(m_oldAddress != newAddress)
-                    {
-                        mDatabase.child("users").child(mUserNr).child("Address").setValue(newAddress);
-                    }
-                    /*if (m_oldPhoneNr != newPhoneNr) {
-                        mDatabase.child(mUserNr).setValue(newPhoneNr);
-                        mDatabase.child("sapiAdvertisments/userId").setValue(newPhoneNr);
-                        //phoneNr = true;
-                    }*/
-
-                    uploadImage();
-
-                    mEdit_Button.setClickable(true);
-                    mSave_Button.setClickable(false);
-                    mProfileImage.setEnabled(false);
-                    mFName.setEnabled(false);
-                    mLName.setEnabled(false);
-                    mPhoneNr.setEnabled(false);
-                    mAddress.setEnabled(false);
-                    mEmail.setEnabled(false);
-                    mLogOff_Button.setClickable(true);
-                    mMyAdvs_Button.setClickable(true);
+                if (m_oldFName != newFName) {
+                    mDatabase.child("users").child(mUserNr).child("FirstName").setValue(newFName);
                 }
-                else
-                {
-                    Toast.makeText(getActivity().getApplicationContext(), "Invalid phone number, can't save profile", Toast.LENGTH_LONG).show();
+                if (m_oldLName != newLName) {
+                    mDatabase.child("users").child(mUserNr).child("LastName").setValue(newLName);
                 }
+                if (m_oldEmail != newEmail) {
+                    mDatabase.child("users").child(mUserNr).child("Email").setValue(newEmail);
+                }
+                if(m_oldAddress != newAddress)
+                {
+                    mDatabase.child("users").child(mUserNr).child("Address").setValue(newAddress);
+                }
+
+                uploadImage();
+
+                mEdit_Button.setClickable(true);
+                mSave_Button.setClickable(false);
+                mProfileImage.setEnabled(false);
+                mFName.setEnabled(false);
+                mLName.setEnabled(false);
+                mAddress.setEnabled(false);
+                mEmail.setEnabled(false);
+                mLogOff_Button.setClickable(true);
+                mMyAdvs_Button.setClickable(true);
             }
         });
 
@@ -299,7 +269,7 @@ public class PersonFragment extends Fragment {
         builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
 
             public void onClick(DialogInterface dialog, int which) {
-                // Do do my action here
+
                 mAuth.signOut();
                 Intent intent = new Intent(getActivity(),LoginActivity.class);
                 startActivity(intent);

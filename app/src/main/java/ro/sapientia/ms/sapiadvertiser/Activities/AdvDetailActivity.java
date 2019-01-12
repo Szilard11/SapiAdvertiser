@@ -148,7 +148,7 @@ public class AdvDetailActivity extends AppCompatActivity {
         builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
 
             public void onClick(DialogInterface dialog, int which) {
-                // Do do my action here
+
                 mdatabase.child("sapiAdvertisments").child(mNewsId).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -176,5 +176,4 @@ public class AdvDetailActivity extends AppCompatActivity {
         AlertDialog alert = builder.create();
         alert.show();
     }
-
 }

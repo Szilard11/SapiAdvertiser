@@ -161,7 +161,7 @@ public class MyAdvDetailActivity extends AppCompatActivity {
         builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
 
             public void onClick(DialogInterface dialog, int which) {
-                // Do do my action here
+
                 mDatabase.child("sapiAdvertisments").child(mNewsId).child("LongDesc").setValue(mLongDesc.getText().toString());
                 mDatabase.child("sapiAdvertisments").child(mNewsId).child("Title").setValue(mTitle.getText().toString());
                 mLongDesc.setEnabled(false);
@@ -202,7 +202,7 @@ public class MyAdvDetailActivity extends AppCompatActivity {
         builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
 
             public void onClick(DialogInterface dialog, int which) {
-                // Do do my action here
+
                 mDatabase.child("sapiAdvertisments").child(mNewsId).child("isDeleted").setValue(1);
                 finish();
             }
