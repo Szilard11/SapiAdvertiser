@@ -1,17 +1,13 @@
-package ro.sapientia.ms.sapiadvertiser;
+package ro.sapientia.ms.sapiadvertiser.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.Toast;
-
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseException;
@@ -19,8 +15,15 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.concurrent.TimeUnit;
+
+import ro.sapientia.ms.sapiadvertiser.R;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -29,10 +32,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private Button mGetCode;
     private Button mLogin;
     private String mVerificationCode;
-    private Spinner mCountryCode;
+    DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
 
-    private FirebaseAuth mAuth;
-    private PhonePrefix prefix = new PhonePrefix();
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +45,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         mLogin = findViewById(R.id.button_login);
         mCode = findViewById(R.id.editText_code);
         mGetCode = findViewById(R.id.button_getCode);
-        mCountryCode = findViewById(R.id.spinner_counterycode);
 
         mLogin.setVisibility(View.INVISIBLE);
         mCode.setVisibility(View.INVISIBLE);
@@ -51,30 +52,46 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         mLogin.setOnClickListener(this);
         mGetCode.setOnClickListener(this);
 
-        mAuth = FirebaseAuth.getInstance();
-
         if(mAuth.getCurrentUser() != null)
         {
-            Intent intent = new Intent(LoginActivity.this, NewsActivity.class);
-            //ez allati sor akkor kell ha nem akarsz vissza menni a loginre, hanem a visszaval egybol az appot bezarja
-            intent.setFlags(intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
+            mDatabase.child("users").child(mAuth.getCurrentUser().getPhoneNumber()).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if(dataSnapshot.exists())
+                    {
+                        if(!dataSnapshot.child("FirstName").getValue().toString().isEmpty() &&
+                                !dataSnapshot.child("LastName").getValue().toString().isEmpty() &&
+                                !dataSnapshot.child("Email").getValue().toString().isEmpty() &&
+                                !dataSnapshot.child("Address").getValue().toString().isEmpty() &&
+                                !dataSnapshot.child("ProfileImage").getValue().toString().isEmpty())
+                        {
+                            Intent intent = new Intent(LoginActivity.this, NewsActivity.class);
+                            intent.setFlags(intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
+                        }
+                        else
+                        {
+                            Intent intent = new Intent(LoginActivity.this, NewsActivity.class);
+                            intent.setFlags(intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
+                        }
+                    }
+                    else
+                    {
+                        newUser(mAuth.getCurrentUser().getPhoneNumber());
+                        Intent intent = new Intent(LoginActivity.this, NewsActivity.class);
+                        intent.setFlags(intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+
         }
-        //Intent intent = new Intent(LoginActivity.this,LoginActivity.class);
-        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this,android.R.layout.simple_spinner_dropdown_item,prefix.getList());
-        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mCountryCode.setAdapter(spinnerAdapter);
-        mCountryCode.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                //String countryPrefix = prefix.prefixFor(adapterView.getItemAtPosition(i).toString());
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
     }
 
     @Override
@@ -83,16 +100,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             case R.id.button_getCode:
                 String phoneNr = mPhoneNr.getText().toString();
 
-                String countryPrefix = prefix.prefixFor(mCountryCode.getSelectedItem().toString());
-                String finalPhoneNr = countryPrefix + phoneNr;
-
-                if(finalPhoneNr.isEmpty() || finalPhoneNr.length()<10)
+                if(phoneNr.isEmpty() || phoneNr.length()!=12)
                 {
                     mPhoneNr.setError("Valid number is required");
                     mPhoneNr.requestFocus();
                     return;
                 }
-                SendVerificationCode(finalPhoneNr);
+                SendVerificationCode(phoneNr);
 
                 break;
             case R.id.button_login:
@@ -122,10 +136,27 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful())
                         {
-                            Intent intent = new Intent(LoginActivity.this, NewsActivity.class);
-                            //ez allati sor akkor kell ha nem akarsz vissza menni a loginre, hanem a visszaval egybol az appot bezarja
-                            intent.setFlags(intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            startActivity(intent);
+                            mDatabase.child("users").child(mPhoneNr.getText().toString()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    if (dataSnapshot.exists()) {
+                                        Intent intent = new Intent(LoginActivity.this, NewsActivity.class);
+                                        intent.setFlags(intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                        startActivity(intent);
+                                    }
+                                    else
+                                    {
+                                        newUser(mPhoneNr.getText().toString());
+                                        Intent intent = new Intent(LoginActivity.this, NewsActivity.class);
+                                        intent.setFlags(intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                        startActivity(intent);
+                                    }
+                                }
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                    }
+                                });
                         }
                         else
                         {
@@ -174,4 +205,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             mPhoneNr.setText("");
         }
     };
+
+    private void newUser(String userId)
+    {
+        mDatabase.child("users").child(userId).child("FirstName").setValue("");
+        mDatabase.child("users").child(userId).child("LastName").setValue("");
+        mDatabase.child("users").child(userId).child("Address").setValue("");
+        mDatabase.child("users").child(userId).child("Email").setValue("");
+        mDatabase.child("users").child(userId).child("ProfileImage").setValue("");
+    }
 }
